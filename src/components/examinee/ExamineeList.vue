@@ -30,22 +30,17 @@ const emits = defineEmits({
 const header = ref(['#', 'Fullname', 'Username', 'Password', 'Action']);
 const examineeList = computed(() => {
     const exam = store.getters['examinee/getExaminee'];
-    const myitem = [];
-    for (const item of exam) {
-        const data = {
-            id: item.id || '',  // Fallback to an empty string or any default value if undefined
-            fullname: item.first_name + ' ' + item.last_name + ' ' + item.middle_name || '',
-            first_name: item.first_name || '',
-            last_name: item.last_name || '',
-            middle_name: item.middle_name || '',
-            username: item.username || '',
-            password: item.password || '',
+    return exam.map((item) => {
+        return {
+            id: item.id,
+            fullname: item.first_name + ' ' + item.last_name + ' ' + item.middle_name,
+            first_name: item.first_name,
+            last_name: item.last_name,
+            middle_name: item.middle_name,
+            username: item.username,
+            password: item.password,
         }
-        myitem.push(data);
-    }
-    return myitem;
-
-
+    })
 })
 
 const handleUpdate = (val) => {

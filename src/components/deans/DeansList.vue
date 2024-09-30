@@ -47,12 +47,12 @@ const department = (deptId) => {
     const department = store.getters['department/getDepartment'].find(item => item.id === deptId);
     return department ? department.department : '';
 }
+
 const deansList = computed(() => {
     const exam = store.getters['deans/getDeans'];
-    const myitem = [];
-    for (const item of exam) {
-        const data = {
-            id: item.id || '',
+    return exam.map((item) => {
+        return {
+            id: item.id,
             fullname: `${item.first_name || ''} ${item.last_name || ''}`,
             firstname: item.first_name,
             lastname: item.last_name,
@@ -63,9 +63,9 @@ const deansList = computed(() => {
             password: item.password,
             status: item.status
         }
-        myitem.push(data);
-    }
-    return myitem;
+    })
+
+
 
 
 })
@@ -79,7 +79,7 @@ const assignDeans = (item) => {
 const handleUpdate = (item) => {
     emits("update", item)
 }
-const handleDelete = (val) => {
+const handleDelete = (item) => {
     emits("delete", item)
 }
 

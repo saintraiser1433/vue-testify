@@ -20,19 +20,19 @@
     </div>
     <base-modal :isToggle="isToggle" size="xxxl" title="Add Assignee" @close="closeModal">
         <template #default>
-            <div class="grid grid-cols-5 gap-2">
-                <div class="col-span-5 lg:col-span-2 xl:col-span-1">
+            <div class="grid grid-cols-12 gap-2">
+                <div class="col-span-12 lg:col-span-4 xl:col-span-4">
                     <BaseCard title="Course Information">
                         <template #default>
-                            <deans-form :isUpdate="isUpdate" :formData="data" @dataDeans="submitDeans"
-                                @reset="resetInstance"></deans-form>
+                            <assign-form :isUpdate="isUpdate" :deanId="deanId" :formData="data" @dataDeans="submitDeans"
+                                @reset="resetInstance"></assign-form>
                         </template>
                     </BaseCard>
                 </div>
-                <div class="col-span-5 lg:col-span-3 xl:col-span-4">
+                <div class="col-span-12 lg:col-span-8 xl:col-span-8">
                     <BaseCard title="Courses Assigned">
                         <template #default>
-                            <deans-list @assign="assignDeans" @update="editDeans" @delete="deleteDeans"></deans-list>
+                            <assign-list @delete="deleteAssignCourse" :deanId="deanId"></assign-list>
                         </template>
                     </BaseCard>
                 </div>
@@ -58,6 +58,8 @@ const { setAlert } = useAlert();
 const data = ref({});
 const isUpdate = ref(false);
 const isToggle = ref(false);
+const deanId = ref(null);
+
 
 /* Deans */
 const submitDeans = (response) => {
@@ -75,6 +77,7 @@ const submitDeans = (response) => {
 }
 
 const assignDeans = (response) => {
+    deanId.value = response.id;
     isToggle.value = true;
 }
 
@@ -94,7 +97,19 @@ const deleteDeans = (response) => {
     setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete')
         .then((result) => {
             if (result.isConfirmed) {
-                store.dispatch('examinee/removeExaminee', response);
+                console.log(response);
+                store.dispatch('deans/removeDeans', response);
+                setToast('success', 'Successfully deleted');
+            }
+        });
+};
+
+const deleteAssignCourse = (response) => {
+    setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete')
+        .then((result) => {
+            if (result.isConfirmed) {
+                console.log(response);
+                store.dispatch('deans/removeAssignCourse', response);
                 setToast('success', 'Successfully deleted');
             }
         });

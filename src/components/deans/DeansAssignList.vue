@@ -2,26 +2,8 @@
     <BaseTable :data="deansList" :header="header">
         <template #row="{ item, index }">
             <td class="table__block">{{ index + 1 }} </td>
-            <td class="table__block">{{ item.fullname }}</td>
-            <td class="table__block">{{ item.department }}</td>
-            <td class="table__block">{{ item.username }}</td>
-            <td class="table__block">{{ item.password }}</td>
+            <td class="table__block">{{ item.course }}</td>
             <td class="table__block">
-                <base-badge :variant="item.status === 1 ? 'success' : 'danger'">
-                    {{ item.status === 1 ? 'Active' : 'Inactive' }}
-                </base-badge>
-
-            </td>
-            <td class="table__block">
-                <base-button type="button" variant="primary" size="small" class="mr-1 " @click="assignDeans(item)">
-                    <i-gridicons-add-outline></i-gridicons-add-outline>
-                </base-button>
-                <base-button type="button" variant="success" size="small" class="mr-1 " @click="handleUpdate(item)">
-                    <i-bx-edit></i-bx-edit>
-                </base-button>
-                <base-button type="button" variant="secondary" size="small" class="mr-1 " @click="handleUpdate(item)">
-                    <i-bx-reset></i-bx-reset>
-                </base-button>
                 <base-button type="button" size="small" variant="danger" @click="handleDelete(item)">
                     <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
                 </base-button>
@@ -38,39 +20,31 @@ const store = useStore();
 
 const emits = defineEmits(['delete']);
 const header = ref(['#', 'Course Assigned', 'Action']);
-
-
-
-
-
-const department = (deptId) => {
-    const department = store.getters['department/getDepartment'].find(item => item.id === deptId);
-    return department ? department.department : '';
-}
-const deansList = computed(() => {
-    const exam = store.getters['deans/getDeans'];
-    const myitem = [];
-    for (const item of exam) {
-        const data = {
-            id: item.id || '',
-            fullname: `${item.first_name || ''} ${item.last_name || ''}`,
-            firstname: item.first_name,
-            lastname: item.last_name,
-            middlename: item.middle_name,
-            department: department(item.departmentId),
-            departmentId: item.departmentId,
-            username: item.username,
-            password: item.password,
-            status: item.status
-        }
-        myitem.push(data);
-    }
-    return myitem;
-
-
+const props = defineProps({
+    deanId: Number
 })
-const handleDelete = (val) => {
-    emits("delete", item)
+
+const deansList = computed(() => {
+    const deansAssign = store.getters['deans/getAssignDeans'];
+    const course = store.getters['course/getCourse'];
+
+    // Filter and map the assigned deans to their respective courses
+    const filtered = deansAssign.filter((dean) => dean.deanId === props.deanId)
+        .map((dean) => course.find((course) => course.id === dean.courseId));
+
+    return filtered.map((item, index) => {
+        const dean = deansAssign.find(dean => dean.deanId === props.deanId && course.find((course) => course.id === dean.courseId) === item);
+
+        return {
+            id: dean ? dean.id : '',  // Ensure dean is found
+            deanId: item ? item.id : '', // Ensure item is found
+            course: item ? item.course : '', // Ensure item is found
+        };
+    });
+});
+
+const handleDelete = (item) => {
+    emits("delete", item.id)
 }
 
 

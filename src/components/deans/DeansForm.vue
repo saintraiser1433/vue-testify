@@ -53,7 +53,21 @@ const formDeans = ref({
     status: 0
 });
 
-const departmentList = computed(() => store.getters['department/getDepartment']);
+
+
+
+const departmentList = computed(() => {
+    const department = store.getters['department/getDepartment'];
+    return department.map((val) => {
+        return {
+            id: val.id,
+            value: val.department
+        }
+    })
+});
+
+
+
 
 watch(
     formData,

@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 import examineeModule from './modules/examinee'
 import courseModule from './modules/course'
 import departmentModule from './modules/department'
-import deansModule from './modules/deans'
+import deansModule from './modules/deans/'
 export default createStore({
   modules: {
     examinee: examineeModule,

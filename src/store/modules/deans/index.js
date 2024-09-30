@@ -23,9 +23,19 @@ export default {
         password: 'awedsd',
         status: 1
       }
+    ],
+    deansAssign: [
+      {
+        id: 1,
+        deanId: 1,
+        courseId: 1
+      }
     ]
   },
   getters: {
+    getAssignDeans(state) {
+      return state.deansAssign
+    },
     getDeans(state) {
       return state.deans
     }
@@ -49,6 +59,9 @@ export default {
     },
     removeDeans({ commit }, payload) {
       commit('deleteDeans', payload)
+    },
+    removeAssignCourse({ commit }, payload) {
+      commit('deleteDeansCourse', payload)
     }
   },
   mutations: {
@@ -68,8 +81,14 @@ export default {
     },
 
     deleteDeans(state, payload) {
-      const findIndex = state.Deans.findIndex((val) => val.id === payload.id)
-      state.Deans.splice(findIndex, 1)
+      const findIndex = state.deans.findIndex((val) => val.id === payload.id)
+      state.deans.splice(findIndex, 1)
+    },
+    deleteDeansCourse(state, payload) {
+      const findIndex = state.deansAssign.findIndex((val) => val.id === payload)
+      if (findIndex !== -1) {
+        state.deansAssign.splice(findIndex, 1)
+      }
     }
   }
 }
