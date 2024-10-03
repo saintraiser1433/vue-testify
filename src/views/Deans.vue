@@ -20,21 +20,13 @@
     </div>
     <base-modal :isToggle="isToggle" size="xxxl" title="Add Assignee" @close="closeModal">
         <template #default>
-            <div class="grid grid-cols-12 gap-2">
+            <div class="grid grid-cols-12 gap-5">
                 <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-                    <BaseCard title="Course Information">
-                        <template #default>
-                            <assign-form :isUpdate="isUpdate" :deanId="deanId" :formData="data" @dataDeans="submitDeans"
-                                @reset="resetInstance"></assign-form>
-                        </template>
-                    </BaseCard>
+                    <assign-form :isUpdate="isUpdate" :deanId="deanId" :formData="data" @formData="submitAssignCourse"
+                        @reset="resetInstance"></assign-form>
                 </div>
                 <div class="col-span-12 lg:col-span-8 xl:col-span-8">
-                    <BaseCard title="Courses Assigned">
-                        <template #default>
-                            <assign-list @delete="deleteAssignCourse" :deanId="deanId"></assign-list>
-                        </template>
-                    </BaseCard>
+                    <assign-list @delete="deleteAssignCourse" :deanId="deanId"></assign-list>
                 </div>
             </div>
         </template>
@@ -63,7 +55,6 @@ const deanId = ref(null);
 
 /* Deans */
 const submitDeans = (response) => {
-    console.log(response);
     if (!isUpdate.value) {
         store.dispatch('deans/setDeans', response);
         setToast('success', "Successfully submitted")
@@ -76,23 +67,24 @@ const submitDeans = (response) => {
 
 }
 
-const assignDeans = (response) => {
-    deanId.value = response.id;
-    isToggle.value = true;
+const submitAssignCourse = (response) => {
+    const data = {
+        deanId: deanId.value,
+        courseId: response
+    }
+    if (!isUpdate.value) {
+        store.dispatch('deans/setAssignCourse', data);
+        setToast('success', "Successfully submitted")
+    } else {
+
+        store.dispatch('deans/editDeans', response);
+        setToast('success', "Successfully updated")
+    }
+    isUpdate.value = false;
+
 }
 
-const editDeans = (response) => {
-    data.value = {
-        id: response.id,
-        firstname: response.firstname,
-        lastname: response.lastname,
-        middlename: response.middlename,
-        departmentId: response.departmentId,
-        status: response.status
 
-    };
-    isUpdate.value = true;
-}
 const deleteDeans = (response) => {
     setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete')
         .then((result) => {
@@ -114,6 +106,25 @@ const deleteAssignCourse = (response) => {
             }
         });
 };
+
+
+const assignDeans = (response) => {
+    deanId.value = response.id;
+    isToggle.value = true;
+}
+
+const editDeans = (response) => {
+    data.value = {
+        id: response.id,
+        firstname: response.firstname,
+        lastname: response.lastname,
+        middlename: response.middlename,
+        departmentId: response.departmentId,
+        status: response.status
+
+    };
+    isUpdate.value = true;
+}
 const resetInstance = () => {
     isUpdate.value = false;
     data.value = {}

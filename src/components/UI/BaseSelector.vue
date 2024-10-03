@@ -1,8 +1,9 @@
 <template>
-    <select class="rounded-sm py-1 px-2 bg-darken outline-none border w-full border-colorBorder focus:border-primary"
+    <select
+        class="rounded-sm py-1 px-2 mt-2 bg-darken outline-none border w-full border-colorBorder focus:border-primary"
         :value="modelValue" @change="updateModel" required>
-        <option value="">Select First</option>
-        <option v-for="i in data" :key="i.id" :value="i.id" selected>{{ i.value }}</option>
+        <option value="" selected>Select First</option>
+        <option v-for="i in data" :key="i.id" :value="i.id">{{ i.value }}</option>
     </select>
 </template>
 

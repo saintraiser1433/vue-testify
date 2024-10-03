@@ -14,8 +14,8 @@
       <span>Entries</span>
     </div>
 
-    <div class="mb-2 lg:text-sm xl:text-sm">
-      <span class="mr-2">Search: </span>
+    <div class="flex justify-center items-center mb-2 lg:text-sm xl:text-sm">
+      <span class="mr-2">Search:</span>
       <base-input v-model="searchInput"></base-input>
     </div>
   </div>
@@ -31,8 +31,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-colorBorder" v-for="(item, index) in paginatedData" :key="item.id">
+
+        <tr v-if="paginatedData && paginatedData.length > 0" class="border-b border-colorBorder"
+          v-for="(item, index) in paginatedData" :key="item.id">
           <slot name="row" :item="item" :index="index" />
+        </tr>
+        <tr v-else class="border-b border-colorBorder">
+          <td :colspan="header.length" class="text-center text-base p-2">No data found</td>
         </tr>
       </tbody>
     </table>

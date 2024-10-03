@@ -28,19 +28,28 @@ const deansList = computed(() => {
     const deansAssign = store.getters['deans/getAssignDeans'];
     const course = store.getters['course/getCourse'];
 
-    // Filter and map the assigned deans to their respective courses
-    const filtered = deansAssign.filter((dean) => dean.deanId === props.deanId)
-        .map((dean) => course.find((course) => course.id === dean.courseId));
-
-    return filtered.map((item, index) => {
-        const dean = deansAssign.find(dean => dean.deanId === props.deanId && course.find((course) => course.id === dean.courseId) === item);
-
+    return course.filter((item) => deansAssign.some((deans) => deans.courseId === item.id && deans.deanId === props.deanId)
+    ).map((res) => {
         return {
-            id: dean ? dean.id : '',  // Ensure dean is found
-            deanId: item ? item.id : '', // Ensure item is found
-            course: item ? item.course : '', // Ensure item is found
+            id: res.id,
+            course: res.course
         };
-    });
+    })
+
+    // Filter and map the assigned deans to their respective courses
+
+    // const filtered = deansAssign.filter((dean) => dean.deanId === props.deanId)
+    //     .map((dean) => course.find((course) => course.id === dean.courseId));
+
+    // return filtered.map((item, index) => {
+    //     const dean = deansAssign.find(dean => dean.deanId === props.deanId && course.find((course) => course.id === dean.courseId) === item);
+
+    //     return {
+    //         id: dean ? dean.id : '',  // Ensure dean is found
+    //         deanId: item ? item.id : '', // Ensure item is found
+    //         course: item ? item.course : '', // Ensure item is found
+    //     };
+    // });
 });
 
 const handleDelete = (item) => {

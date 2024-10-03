@@ -42,17 +42,10 @@ export default {
   },
   actions: {
     setDeans({ commit }, payload) {
-      const deans = {
-        id: uuidv4(),
-        first_name: payload.firstname,
-        last_name: payload.lastname,
-        middle_name: payload.middlename,
-        username: 'user1',
-        password: 'user1',
-        departmentId: payload.departmentId,
-        status: payload.status
-      }
-      commit('addDeans', deans)
+      commit('addDeans', payload)
+    },
+    setAssignCourse({ commit }, payload) {
+      commit('addAssignCourse', payload)
     },
     editDeans({ commit }, payload) {
       commit('updateDeans', payload)
@@ -66,7 +59,26 @@ export default {
   },
   mutations: {
     addDeans(state, payload) {
-      state.deans.push(payload)
+      const deans = {
+        id: uuidv4(),
+        first_name: payload.firstname,
+        last_name: payload.lastname,
+        middle_name: payload.middlename,
+        username: 'user1',
+        password: 'user1',
+        departmentId: payload.departmentId,
+        status: payload.status
+      }
+      state.deans.push(deans)
+    },
+    addAssignCourse(state, payload) {
+      const data = {
+        id: uuidv4(),
+        ...payload
+      }
+
+      state.deansAssign.push(data)
+      console.log(state.deansAssign)
     },
     updateDeans(state, payload) {
       const findIndex = state.deans.findIndex((val) => val.id === payload.id)
