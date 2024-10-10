@@ -19,29 +19,62 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { useAxios } from '@vueuse/integrations/useAxios';
+import { useToast } from '@/composables/useToast';
 import { useStore } from 'vuex';
+import apiClient from '@/api/axios'
 const store = useStore();
-
+const axios = useAxios();
+const { setToast } = useToast();
 const emits = defineEmits({
     update: Object,
     delete: Object
 });
 const header = ref(['#', 'Fullname', 'Username', 'Password', 'Action']);
+
+const { data: examineeData, isLoading, isFinished, error, response, execute } = useAxios('/examinee', { method: 'GET' }, apiClient);
+
+
 const examineeList = computed(() => {
-    const exam = store.getters['examinee/getExaminee'];
-    return exam.map((item) => {
+    if (!error) {
+        setToast("error", error);
+    }
+
+    return examineeData.value?.data?.map((item) => {
         return {
-            id: item.id,
+            examinee_id: item.examinee_id,
             fullname: item.first_name + ' ' + item.last_name + ' ' + item.middle_name,
-            first_name: item.first_name,
-            last_name: item.last_name,
-            middle_name: item.middle_name,
             username: item.username,
             password: item.password,
         }
     })
 })
+
+
+
+onMounted(() => {
+    execute();
+
+})
+
+
+
+
+// const examineeList = computed(() => {
+//     const exam = store.getters['examinee/getExaminee'];
+//     return exam.map((item) => {
+//         return {
+//             id: item.id,
+//             fullname: item.first_name + ' ' + item.last_name + ' ' + item.middle_name,
+//             first_name: item.first_name,
+//             last_name: item.last_name,
+//             middle_name: item.middle_name,
+//             username: item.username,
+//             password: item.password,
+//         }
+//     })
+// })
 
 const handleUpdate = (val) => {
     emits("update", val)

@@ -45,7 +45,7 @@
 
   <div class="flex flex-col lg:flex-row xl:flex-row py-1 items-center lg:text-sm xl:text-sm">
     <span class="font-light opacity-50 text-center flex-grow lg:text-left xl:text-left">
-      Showing {{ paginatedData.length }} out of {{ filteredTableData.length }}
+      Showing {{ paginatedData?.length }} out of {{ filteredTableData?.length }}
     </span>
     <ul class="pagination">
       <li class="pagination__item" :class="{ disabled: currentPage === 1 }" @click="prevPage">
@@ -86,7 +86,7 @@ const currentPage = ref(1)
 
 
 const filteredTableData = computed(() => {
-  return data.value.filter((item) => {
+  return data.value?.filter((item) => {
     return Object.values(item).some((val) =>
       val?.toString().toLowerCase().includes(searchInput.value)
     )
@@ -100,7 +100,7 @@ const totalPages = computed(() => {
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * showEntries.value
   const end = start + showEntries.value
-  return filteredTableData.value.slice(start, end)
+  return filteredTableData.value?.slice(start, end)
 })
 
 const setPage = (page) => {
