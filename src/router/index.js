@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
+import { QuestionApi } from '@/services/question'
+import { ExamApi } from '@/services/exam'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,25 @@ const router = createRouter({
       component: () => import('../views/Exam.vue')
     },
     {
+      path: '/question/:id',
+      name: 'Question',
+      component: () => import('../views/Questions.vue'),
+      beforeEnter: (to, from, next) => {
+        const questionApi = ExamApi().getExamById(to.params.id)
+        questionApi
+          .then((response) => {
+            if (response.status === 200) {
+              next()
+            } else {
+              next({ name: 'NotFound' })
+            }
+          })
+          .catch(() => {
+            next({ name: 'NotFound' })
+          })
+      }
+    },
+    {
       path: '/rankings',
       name: 'Rankings',
       component: () => import('../views/Exam.vue')
@@ -43,6 +63,11 @@ const router = createRouter({
       path: '/backup',
       name: 'Backup',
       component: () => import('../views/Backup.vue')
+    },
+    {
+      path: '/:catchAll(.*)*',
+      name: 'NotFound',
+      component: () => import('../views/NotFound.vue')
     }
   ]
 })

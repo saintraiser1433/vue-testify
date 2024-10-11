@@ -5,10 +5,10 @@
       <td class="table__block">{{ item.fullname }}</td>
       <td class="table__block">{{ item.username }}</td>
       <td class="table__block">
-        <base-button type="button" class="bg-success mr-1" @click="handleUpdate(item)">
+        <base-button type="button" class="bg-success mr-1" size="small" @click="handleUpdate(item)">
           <i-bx-edit></i-bx-edit>
         </base-button>
-        <base-button type="button" class="bg-danger" @click="handleDelete(item)">
+        <base-button type="button" class="bg-danger" size="small" @click="handleDelete(item)">
           <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
         </base-button>
       </td>

@@ -4,6 +4,10 @@ export const ExamApi = () => {
   const getExam = () => {
     return apiClient.get('/exam')
   }
+
+  const getExamById = (id) => {
+    return apiClient.get(`/exam/${id}`)
+  }
   const insertExam = (data) => {
     return apiClient.post('/exam', data)
   }
@@ -14,5 +18,5 @@ export const ExamApi = () => {
     return apiClient.delete(`/exam/${id}`)
   }
 
-  return { getExam, insertExam, updateExam, deleteExam }
+  return { getExam, insertExam, updateExam, deleteExam, getExamById }
 }

@@ -2,10 +2,8 @@
   <div class="flex justify-between items-center md:flex-col lg:flex-row xl:flex-row">
     <div class="p-2 lg:text-sm xl:text-sm">
       <span>Show</span>
-      <select
-        class="mx-2 rounded-sm py-1 px-2 bg-darken outline-none border border-colorBorder focus:border-primary"
-        v-model="showEntries"
-      >
+      <select class="mx-2 rounded-sm py-1 px-2 bg-darken outline-none border border-colorBorder focus:border-primary"
+        v-model="showEntries">
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="30">30</option>
@@ -21,7 +19,8 @@
     </div>
   </div>
 
-  <div class="overflow-x-auto">
+  <div
+    class="overflow-x-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-slate-300">
     <table class="border-t border-colorBorder whitespace-nowrap w-100 min-w-full mx-auto">
       <thead class="border-y border-colorBorder text-left">
         <tr>
@@ -31,11 +30,7 @@
         </tr>
       </thead>
       <tbody v-if="paginatedData && paginatedData.length > 0">
-        <tr
-          class="border-b border-colorBorder"
-          v-for="(item, index) in paginatedData"
-          :key="item.id"
-        >
+        <tr class="border-b border-colorBorder" v-for="(item, index) in paginatedData" :key="item.id">
           <slot name="row" :item="item" :index="index" />
         </tr>
       </tbody>
@@ -55,20 +50,11 @@
       <li class="pagination__item" :class="{ disabled: currentPage === 1 }" @click="prevPage">
         <i-fe-arrow-left></i-fe-arrow-left>
       </li>
-      <li
-        class="pagination__item"
-        v-for="page in totalPages"
-        :key="page"
-        :class="{ 'pagination-active': currentPage === page }"
-        @click="setPage(page)"
-      >
+      <li class="pagination__item" v-for="page in totalPages" :key="page"
+        :class="{ 'pagination-active': currentPage === page }" @click="setPage(page)">
         <a href="#">{{ page }}</a>
       </li>
-      <li
-        class="pagination__item"
-        :class="{ disabled: currentPage === totalPages }"
-        @click="nextPage"
-      >
+      <li class="pagination__item" :class="{ disabled: currentPage === totalPages }" @click="nextPage">
         <i-fe-arrow-right></i-fe-arrow-right>
       </li>
     </ul>

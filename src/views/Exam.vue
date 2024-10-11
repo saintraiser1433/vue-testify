@@ -1,18 +1,13 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
-    <div class="col-span-5 lg:col-span-4 xl:col-span-3">
+    <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <exam-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExam="submitExam"
-            @reset="resetInstance"
-          ></exam-form>
+          <exam-form :isUpdate="isUpdate" :formData="data" @dataExam="submitExam" @reset="resetInstance"></exam-form>
         </template>
       </BaseCard>
     </div>
-    <div class="col-span-5 lg:col-span-8 xl:col-span-9">
+    <div class="col-span-12 lg:col-span-8 xl:col-span-9">
       <BaseCard title="List of Exam's">
         <template #default>
           <exam-list @update="editExam" @delete="removeExam"></exam-list>
@@ -21,8 +16,8 @@
     </div>
   </div>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { useStore } from 'vuex'
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
@@ -90,4 +85,3 @@ const resetInstance = () => {
   data.value = {}
 }
 </script>
-  
