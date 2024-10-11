@@ -1,8 +1,12 @@
 <template>
-  <div class="w-full rounded-lg shadow-lg bg-cardColor  py-2 px-4">
-    <div v-if="title" :class="{ 'mb-3': title }" class="flex flex-col lg:grid lg:grid-cols-2 xl:grid xl:grid-cols-2">
+  <div class="w-full rounded-lg shadow-lg bg-cardColor py-2 px-4">
+    <div
+      v-if="title"
+      :class="{ 'mb-3': title }"
+      class="flex flex-col lg:grid lg:grid-cols-2 xl:grid xl:grid-cols-2"
+    >
       <div>
-        <h1 class="xl:text-2xl text-1xl">{{ title }}</h1>
+        <h1 class="xl:text-2xl">{{ title }}</h1>
         <span class="text-xs leading-none">{{ subtitle }}</span>
       </div>
       <div class="flex mt-2 text-sm lg:items-start lg:justify-end xl:items-start xl:justify-end">
@@ -22,10 +26,7 @@ const props = defineProps({
     default: ''
   },
   subtitle: {
-    type: String,
+    type: String
   }
 })
-
-
-
 </script>

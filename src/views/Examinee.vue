@@ -1,83 +1,91 @@
 <template>
-    <div class="grid grid-cols-5 gap-2">
-        <div class="col-span-5 lg:col-span-2 xl:col-span-2">
-            <BaseCard title="Examinee Information">
-                <template #default>
-                    <examinee-form :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee"
-                        @reset="resetInstance"></examinee-form>
-                </template>
-            </BaseCard>
-        </div>
-        <div class="col-span-5 lg:col-span-3 xl:col-span-3">
-            <BaseCard title="List of Examinee's">
-                <!-- :formData="editExaminee" -->
-                <template #default>
-                    <examinee-list @update="editExaminee" @delete="deleteExaminee"></examinee-list>
-                </template>
-            </BaseCard>
-        </div>
-
+  <div class="grid grid-cols-5 gap-2">
+    <div class="col-span-5 lg:col-span-2 xl:col-span-2">
+      <BaseCard title="Examinee Information">
+        <template #default>
+          <examinee-form
+            :isUpdate="isUpdate"
+            :formData="data"
+            @dataExaminee="submitExaminee"
+            @reset="resetInstance"
+          ></examinee-form>
+        </template>
+      </BaseCard>
     </div>
-
+    <div class="col-span-5 lg:col-span-3 xl:col-span-3">
+      <BaseCard title="List of Examinee's">
+        <template #default>
+          <examinee-list @update="editExaminee" @delete="removeExaminee"></examinee-list>
+        </template>
+      </BaseCard>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import Swal from 'sweetalert2'
 import { useStore } from 'vuex'
-import { useAlert } from '@/composables/useAlert';
-import { useToast } from '@/composables/useToast';
+import { useAlert } from '@/composables/useAlert'
+import { useToast } from '@/composables/useToast'
+import { ExamineeApi } from '@/services/examinee'
+
 import { defineAsyncComponent, ref } from 'vue'
 
-const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'));
-const ExamineeList = defineAsyncComponent(() => import('../components/examinee/ExamineeList.vue'));
+const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'))
+const ExamineeList = defineAsyncComponent(() => import('../components/examinee/ExamineeList.vue'))
 
-const store = useStore();
-const { setToast } = useToast();
+const store = useStore()
+const { setToast } = useToast()
 const { setAlert } = useAlert()
-const data = ref({});
-const isUpdate = ref(false);
+const { insertExaminee, updateExaminee, deleteExaminee } = ExamineeApi()
+const data = ref({})
+const isUpdate = ref(false)
+
 /* Examinee */
-
-
-
-const submitExaminee = (response) => {
+const submitExaminee = async (response) => {
+  try {
     if (!isUpdate.value) {
-        store.dispatch('examinee/setExaminee', response);
-        setToast('success', "Successfully submitted")
+      const res = await insertExaminee(response)
+      store.dispatch('examinee/addExaminee', res.data.data)
+      setToast('success', res.data.message)
     } else {
-        store.dispatch('examinee/editExaminee', response);
-        setToast('success', "Successfully updated")
+      const updateData = {
+        first_name: response.first_name,
+        middle_name: response.middle_name,
+        last_name: response.last_name
+      }
+      const res = await updateExaminee(updateData, response.examinee_id)
+      store.dispatch('examinee/editExaminee', response)
+      setToast('success', res.data.message)
     }
-    isUpdate.value = false;
-
+  } catch (e) {
+    setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isUpdate.value = false
+  }
 }
 
 const editExaminee = (response) => {
-    const res = {
-        id: response.id,
-        firstname: response.first_name,
-        lastname: response.last_name,
-        middlename: response.middle_name,
-
+  data.value = response
+  isUpdate.value = true
+}
+const removeExaminee = (response) => {
+  setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete').then(
+    async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteExaminee(response.examinee_id)
+          store.dispatch('examinee/removeExaminee', response)
+          setToast('success', 'Successfully deleted')
+        } catch (e) {
+          setToast('error', e.response.data.error || 'An error occurred')
+        }
+      }
     }
-    data.value = res;
-    isUpdate.value = true;
+  )
 }
-const deleteExaminee = (response) => {
-    setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete')
-        .then((result) => {
-            if (result.isConfirmed) {
-                store.dispatch('examinee/removeExaminee', response);
-                setToast('success', 'Successfully deleted');
-            }
-        });
-};
+
 const resetInstance = () => {
-    isUpdate.value = false;
-    data.value = {}
+  isUpdate.value = false
+  data.value = {}
 }
-
-
-
-
 </script>

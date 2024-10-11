@@ -1,21 +1,8 @@
-import { v4 as uuidv4 } from 'uuid'
+import { CourseApi } from '@/services/course'
 export default {
   namespaced: true,
   state: {
-    course: [
-      {
-        id: 1,
-        course: 'Bachelor of Science in Agriculture Major in Horticulture (BS Agri-Horticulture)',
-        prefix: 'BSAMH',
-        score: 50
-      },
-      {
-        id: 2,
-        course: 'Bachelor of Secondary Education(BSED-Math) major in Mathematics',
-        prefix: 'BSED-MATH',
-        score: 30
-      }
-    ]
+    course: []
   },
   getters: {
     getCourse(state) {
@@ -23,14 +10,18 @@ export default {
     }
   },
   actions: {
-    setCourse({ commit }, payload) {
-      const course = {
-        id: uuidv4(),
-        course: payload.course,
-        prefix: payload.prefix,
-        score: payload.score
+    async fetchCourse({ commit }) {
+      try {
+        const response = await CourseApi().getCourse()
+
+        commit('setCourse', response.data)
+      } catch (e) {
+        throw e
       }
-      commit('addCourse', course)
+    },
+
+    addCourse({ commit }, payload) {
+      commit('addCourse', payload)
     },
     editCourse({ commit }, payload) {
       commit('updateCourse', payload)
@@ -40,22 +31,28 @@ export default {
     }
   },
   mutations: {
+    setCourse(state, payload) {
+      state.course = payload
+    },
     addCourse(state, payload) {
-      state.course.push(payload)
+      state.course.unshift(payload)
     },
     updateCourse(state, payload) {
-      const findIndex = state.course.findIndex((val) => val.id === payload.id)
-      const data = {
-        course: payload.course,
-        prefix: payload.prefix,
-        score: payload.score
+      const findIndex = state.course.findIndex((val) => val.course_id === payload.course_id)
+      if (findIndex !== -1) {
+        const data = {
+          description: payload.description,
+          score: payload.score
+        }
+        state.course[findIndex] = { ...state.course[findIndex], ...data }
       }
-      state.course[findIndex] = { ...state.course[findIndex], ...data }
     },
 
     deleteCourse(state, payload) {
-      const findIndex = state.course.findIndex((val) => val.id === payload.id)
-      state.course.splice(findIndex, 1)
+      const findIndex = state.course.findIndex((val) => val.course_id === payload.course_id)
+      if (findIndex !== -1) {
+        state.course.splice(findIndex, 1)
+      }
     }
   }
 }

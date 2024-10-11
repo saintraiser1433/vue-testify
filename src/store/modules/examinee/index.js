@@ -1,25 +1,8 @@
-import { v4 as uuidv4 } from 'uuid'
+import { ExamineeApi } from '@/services/examinee'
 export default {
   namespaced: true,
   state: {
-    examinee: [
-      {
-        id: 1,
-        first_name: 'John Rey',
-        last_name: 'Decosta',
-        middle_name: 'Xavier',
-        username: 'xjsxc',
-        password: 'dasdasdas'
-      },
-      {
-        id: 2,
-        first_name: 'Jerald',
-        last_name: 'Bacquiano',
-        middle_name: 'Abano',
-        username: 'asdfvv',
-        password: 'awedsd'
-      }
-    ]
+    examinee: []
   },
   getters: {
     getExaminee(state) {
@@ -27,16 +10,16 @@ export default {
     }
   },
   actions: {
-    setExaminee({ commit }, payload) {
-      const examinee = {
-        id: uuidv4(),
-        first_name: payload.firstname,
-        last_name: payload.lastname,
-        middle_name: payload.middlename,
-        username: 'user1',
-        password: 'user1'
+    async fetchExaminees({ commit }) {
+      try {
+        const response = await ExamineeApi().getExaminee()
+        commit('setExaminee', response.data)
+      } catch (error) {
+        throw error
       }
-      commit('addExaminee', examinee)
+    },
+    addExaminee({ commit }, payload) {
+      commit('addExaminee', payload)
     },
     editExaminee({ commit }, payload) {
       commit('updateExaminee', payload)
@@ -46,22 +29,39 @@ export default {
     }
   },
   mutations: {
+    setExaminee(state, payload) {
+      state.examinee = payload
+    },
     addExaminee(state, payload) {
-      state.examinee.push(payload)
+      const data = {
+        examinee_id: payload.examinee_id,
+        fullname: `${payload.first_name} ${payload.last_name} ${payload.middle_name || ''}`,
+        first_name: payload.first_name,
+        last_name: payload.last_name,
+        middle_name: payload.middle_name,
+        username: payload.username,
+        password: payload.password
+      }
+
+      state.examinee.unshift(data)
     },
     updateExaminee(state, payload) {
-      const findIndex = state.examinee.findIndex((val) => val.id === payload.id)
-      const data = {
-        first_name: payload.firstname,
-        last_name: payload.lastname,
-        middle_name: payload.middlename
+      const findIndex = state.examinee.findIndex((val) => val.examinee_id === payload.examinee_id)
+      if (findIndex !== -1) {
+        const data = {
+          first_name: payload.first_name,
+          last_name: payload.last_name,
+          middle_name: payload.middle_name
+        }
+        state.examinee[findIndex] = { ...state.examinee[findIndex], ...data }
       }
-      state.examinee[findIndex] = { ...state.examinee[findIndex], ...data }
     },
 
     deleteExaminee(state, payload) {
-      const findIndex = state.examinee.findIndex((val) => val.id === payload.id)
-      state.examinee.splice(findIndex, 1)
+      const findIndex = state.examinee.findIndex((val) => val.examinee_id === payload.examinee_id)
+      if (findIndex !== -1) {
+        state.examinee.splice(findIndex, 1)
+      }
     }
   }
 }

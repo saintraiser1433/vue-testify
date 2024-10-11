@@ -39,7 +39,7 @@
 
   /* TABLE & PAGINATION */
   .table__block {
-    @apply py-3 px-5 lg:px-2 lg:text-sm xl:text-sm xl:px-2;
+    @apply py-3 px-5 lg:px-2 lg:text-sm xl:text-sm xl:px-2 capitalize;
   }
 
   .pagination {
@@ -123,15 +123,6 @@
     display: flex;
     align-items: center;
     min-height: calc(100% - var(1.75rem) * 2);
-  }
-
-  /* Toggle ON state */
-  input:checked + .switch__slider {
-    @apply bg-primary /* Change slider background on checked */;
-  }
-
-  input:checked + .switch__slider::before {
-    transform: translateX(1.5rem);
   }
 }
 

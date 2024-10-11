@@ -1,9 +1,11 @@
 <template>
-  <BaseTable :data="courseList" :header="header">
+  <BaseTable :data="examList" :header="header">
     <template #row="{ item, index }">
       <td class="table__block">{{ index + 1 }}</td>
+      <td class="table__block">{{ item.exam_title }}</td>
       <td class="table__block">{{ item.description }}</td>
-      <td class="table__block">{{ item.score }}</td>
+      <td class="table__block text-center">{{ item.time_limit }}</td>
+      <td class="table__block text-center">{{ item.question_limit }}</td>
       <td class="table__block">
         <base-button type="button" class="bg-success mr-1" @click="handleUpdate(item)">
           <i-bx-edit></i-bx-edit>
@@ -25,7 +27,7 @@ const emits = defineEmits({
   update: Object,
   delete: Object
 })
-const header = ref(['#', 'Course', 'Score Attained', 'Action'])
+const header = ref(['#', 'Exam Title', 'Description', 'Time Limit', 'Question Limit', 'Action'])
 const handleUpdate = (val) => {
   emits('update', val)
 }
@@ -33,16 +35,16 @@ const handleDelete = (val) => {
   emits('delete', val)
 }
 
-const courseList = computed(() => store.getters['course/getCourse'])
-const fetchExaminee = async () => {
+const examList = computed(() => store.getters['exam/getExam'])
+const fetchExam = async () => {
   try {
-    await store.dispatch('course/fetchCourse')
+    await store.dispatch('exam/fetchExam')
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   }
 }
 
 onMounted(() => {
-  fetchExaminee()
+  fetchExam()
 })
 </script>
