@@ -3,12 +3,8 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Examinee Information">
         <template #default>
-          <examinee-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExaminee="submitExaminee"
-            @reset="resetInstance"
-          ></examinee-form>
+          <examinee-form :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee"
+            @reset="resetInstance"></examinee-form>
         </template>
       </BaseCard>
     </div>
@@ -26,7 +22,7 @@
 import { useStore } from 'vuex'
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
-import { ExamineeApi } from '@/services/examinee'
+import { ExamineeApi } from '@/services/examinee-services'
 
 import { defineAsyncComponent, ref } from 'vue'
 

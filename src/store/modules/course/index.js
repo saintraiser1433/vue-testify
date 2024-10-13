@@ -1,4 +1,4 @@
-import { CourseApi } from '@/services/course'
+import { CourseApi } from '@/services/course-services'
 export default {
   namespaced: true,
   state: {

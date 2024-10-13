@@ -3,12 +3,8 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Course Information">
         <template #default>
-          <course-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataCourse="submitCourse"
-            @reset="resetInstance"
-          ></course-form>
+          <course-form :isUpdate="isUpdate" :formData="data" @dataCourse="submitCourse"
+            @reset="resetInstance"></course-form>
         </template>
       </BaseCard>
     </div>
@@ -28,7 +24,7 @@ import { useStore } from 'vuex'
 import { useToast } from '@/composables/useToast'
 import { useAlert } from '@/composables/useAlert'
 import { defineAsyncComponent, ref } from 'vue'
-import { CourseApi } from '@/services/course'
+import { CourseApi } from '@/services/course-services'
 const CourseForm = defineAsyncComponent(() => import('../components/course/CourseForm.vue'))
 const CourseList = defineAsyncComponent(() => import('../components/course/CourseList.vue'))
 

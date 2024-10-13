@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { QuestionApi } from '@/services/question'
-import { ExamApi } from '@/services/exam'
+import { ExamApi } from '@/services/exam-services'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

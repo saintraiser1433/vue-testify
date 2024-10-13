@@ -21,7 +21,7 @@
 import { useStore } from 'vuex'
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
-import { ExamApi } from '@/services/exam'
+import { ExamApi } from '@/services/exam-services'
 
 import { defineAsyncComponent, ref } from 'vue'
 

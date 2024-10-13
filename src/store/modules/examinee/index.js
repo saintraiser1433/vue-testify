@@ -1,4 +1,4 @@
-import { ExamineeApi } from '@/services/examinee'
+import { ExamineeApi } from '@/services/examinee-services'
 export default {
   namespaced: true,
   state: {

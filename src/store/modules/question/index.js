@@ -1,4 +1,4 @@
-import { ExamApi } from '@/services/exam-services'
+import { ChoicesApi } from '@/services/exam-services'
 export default {
   namespaced: true,
   state: {

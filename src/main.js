@@ -18,6 +18,8 @@ const BaseSwitch = defineAsyncComponent(() => import('./components/UI/BaseSwitch
 const BaseSelector = defineAsyncComponent(() => import('./components/UI/BaseSelector.vue'))
 const BaseModal = defineAsyncComponent(() => import('./components/UI/BaseModal.vue'))
 const BaseTextArea = defineAsyncComponent(() => import('./components/UI/BaseTextArea.vue'))
+const BaseCheckBox = defineAsyncComponent(() => import('./components/UI/BaseCheckBox.vue'))
+
 /* Components */
 const app = createApp(App)
 app.component('BaseCard', BaseCard)
@@ -31,6 +33,7 @@ app.component('BaseSwitch', BaseSwitch)
 app.component('BaseSelector', BaseSelector)
 app.component('BaseModal', BaseModal)
 app.component('BaseTextArea', BaseTextArea)
+app.component('BaseCheckBox', BaseCheckBox)
 /* Use */
 
 app.use(router)
