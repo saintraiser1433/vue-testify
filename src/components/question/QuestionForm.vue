@@ -6,17 +6,10 @@
     </div>
     <div class="mb-2">
       <label for="question">Exam Description:</label>
-      <base-text-area id="question" v-model="formQuestion.question" />
+      <base-text-area id="question" v-model="question" />
     </div>
     <div class="flex mb-2 border-b border-colorBorder pb-2">
-      <base-button
-        type="button"
-        class="ml-auto"
-        variant="success"
-        :isRounded="false"
-        size="small"
-        @click="addChoices"
-      >
+      <base-button type="button" class="ml-auto" variant="success" :isRounded="false" size="small" @click="addChoices">
         <div class="flex justify-between items-center gap-2">
           <i-mingcute-plus-fill></i-mingcute-plus-fill>
           <span>Add Choices</span>
@@ -31,14 +24,8 @@
         </div>
 
         <div class="flex gap-1">
-          <base-button
-            type="button"
-            class="ml-auto h-7 w-7 inline-flex items-center justify-center"
-            @click="removeChoices(index)"
-            variant="danger"
-            :isRounded="true"
-            size="small"
-          >
+          <base-button type="button" class="ml-auto h-7 w-7 inline-flex items-center justify-center"
+            @click="removeChoices(index)" variant="danger" :isRounded="true" size="small">
             <i-tabler-trash class="flex-shrink-0"></i-tabler-trash>
           </base-button>
         </div>
@@ -49,9 +36,7 @@
     <base-button type="submit" variant="primary" size="block">{{
       isUpdate ? 'Update' : 'Submit'
     }}</base-button>
-    <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-      >Reset</base-button
-    >
+    <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset">Reset</base-button>
   </form>
 </template>
 
@@ -75,11 +60,10 @@ const props = defineProps({
 
 const route = useRoute()
 const choicesList = ref([])
+const question = ref('');
 const questionId = ref(null)
 const { isUpdate, formData } = toRefs(props)
-const formQuestion = ref({
-  question: ''
-})
+
 
 const addChoices = () => {
   choicesList.value.push({ description: '', status: false })
@@ -87,7 +71,7 @@ const addChoices = () => {
 
 const removeChoices = async (index) => {
   if (isUpdate.value) {
-    const id = choicesList.value[index].choices_id
+    const id = choicesList.value[index].choices_id;
   }
   if (index !== -1) {
     choicesList.value.splice(index, 1)
@@ -95,17 +79,31 @@ const removeChoices = async (index) => {
 }
 
 const submitQuestion = () => {
-  const data = {
-    ...formQuestion.value,
-    exam_id: route.params.id,
-    question_id: isUpdate.value ? questionId.value : 0,
-    choices: choicesList.value.map((choice) => ({
-      choices_id: isUpdate.value ? choice.choices_id : 0,
-      description: choice.description,
-      status: choice.status
-    }))
+  let data;
+  if (!isUpdate.value) {
+    data = {
+      question: question.value,
+      exam_id: route.params.id,
+      choices: choicesList.value.map((choice) => {
+        return {
+          description: choice.description,
+          status: choice.status
+        }
+      }),
+    }
+  } else {
+    data = {
+      question: question.value,
+      question_id: questionId.value,
+      choices: choicesList.value.map((choice) => {
+        return {
+          choices_id: choice.choices_id,
+          description: choice.description,
+          status: choice.status
+        }
+      }),
+    }
   }
-
   emits('dataQuestChoice', data)
 }
 
@@ -120,7 +118,7 @@ watch(
         description: item.choice_name,
         status: item.status
       }))
-      formQuestion.value = { question: newData.question }
+      question.value = newData.question
       questionId.value = newData.question_id
       choicesList.value = choicesData
     }
@@ -129,6 +127,9 @@ watch(
 )
 
 const reset = () => {
-  emits('reset')
+  question.value = '';
+  choicesList.value = [];
+  choicesRemove.value = [];
+  questionId.value = null;
 }
 </script>

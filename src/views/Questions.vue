@@ -2,22 +2,14 @@
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
       <base-card title="Question Information">
-        <question-form
-          @dataQuestChoice="submitQuestion"
-          :formData="data"
-          :isUpdate="isUpdate"
-          @reset="resetInstance"
-        >
+        <question-form @dataQuestChoice="submitQuestion" :formData="data" :isUpdate="isUpdate">
         </question-form>
       </base-card>
     </div>
     <div class="col-span-12 lg:col-span-4 xl:col-span-8">
       <base-card title="Question List">
-        <question-list
-          :questionData="questionData"
-          @update="editQuestionChoices"
-          @delete="removeQuestionChoices"
-        ></question-list>
+        <question-list :questionData="questionData" @update="editQuestionChoices"
+          @delete="removeQuestionChoices"></question-list>
       </base-card>
     </div>
   </div>
@@ -26,16 +18,15 @@
 <script setup>
 import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { ChoicesApi } from '@/services/choices-services'
-import { useStore } from 'vuex'
+
 import { useToast } from '@/composables/useToast'
 import { useRoute } from 'vue-router'
 import { useAlert } from '@/composables/useAlert'
 import { QuestionApi } from '@/services/question-services'
 const QuestionForm = defineAsyncComponent(() => import('@/components/question/QuestionForm.vue'))
 const QuestionList = defineAsyncComponent(() => import('@/components/question/QuestionList.vue'))
-const { insertQuestChoices, updateQuestion, deleteQuestionChoices } = QuestionApi()
+const { insertQuestChoices, updateQuestChoices, deleteQuestionChoices } = QuestionApi()
 // const { insertChoices, updateChoices, deleteChoices } = ChoicesApi()
-const store = useStore()
 const { setToast } = useToast()
 const { setAlert } = useAlert()
 const route = useRoute()
@@ -50,18 +41,17 @@ const submitQuestion = async (response) => {
       questionData.value.unshift(res.data.data)
       setToast('success', res.data.message)
     } else {
-      const updateData = {
-        exam_title: response.exam_title,
-        description: response.description,
-        time_limit: response.time_limit,
-        question_limit: response.question_limit
+      const res = await updateQuestChoices(response, response.question_id)
+      const findIndex = questionData.value.findIndex((item) => item.question_id === response.question_id);
+      if (findIndex !== -1) {
+        questionData.value[findIndex] = response
+        return setToast('success', res.data.message)
       }
-      const res = await updateChoices(updateData, response.exam_id)
-      store.dispatch('questChoices/updateQuestChoice', response)
       setToast('success', res.data.message)
     }
   } catch (e) {
-    setToast('error', e.response.data.error || 'An error occurred')
+    console.log(e);
+    // setToast('error', e.response.data.error || 'An error occurred')
   } finally {
     isUpdate.value = false
   }
@@ -102,10 +92,6 @@ const fetchQuestChoice = async () => {
   }
 }
 
-const resetInstance = () => {
-  isUpdate.value = false
-  data.value = {}
-}
 
 onMounted(() => {
   fetchQuestChoice()
