@@ -13,6 +13,7 @@ export default {
     async fetchExam({ commit }) {
       try {
         const response = await ExamApi().getExam()
+
         commit('setExam', response.data)
       } catch (e) {
         throw e

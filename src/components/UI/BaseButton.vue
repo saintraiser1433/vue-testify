@@ -17,11 +17,17 @@
 <script setup>
 const props = defineProps({
   disabled: {
-    variant: Boolean,
+    type: Boolean,
     default: false
   },
-  isRounded: false,
-  type: String, //button / submit
+  isRounded: {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    type: String,
+    default: 'submit'
+  }, //button / submit
   variant: String, // primary secondary success
   size: String // small // block
 })

@@ -13,6 +13,7 @@ export default {
     async fetchQuestChoice({ commit }, payload) {
       try {
         const response = await ChoicesApi().getChoicesByExamId(payload)
+        console.log(response.data)
         commit('setQuestChoice', response.data)
       } catch (e) {
         throw e
@@ -31,10 +32,14 @@ export default {
   },
   mutations: {
     setQuestChoice(state, payload) {
+      const data = payload.map((item) => {
+        return {}
+      })
+
       state.data = payload
     },
     addQuestChoice(state, payload) {
-      state.data.unshift(payload)
+      state.data.push(payload)
     },
     updateQuestChoice(state, payload) {
       const findIndex = state.exam.findIndex((val) => val.exam_id === payload.exam_id)
