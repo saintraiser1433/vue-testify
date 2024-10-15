@@ -34,31 +34,25 @@ const { isUpdate, formData } = toRefs(props);
 // Reactive form object
 const formDepartment = ref({
     department: '',
-    status: 0,
-
+    status: true,
 });
 
-
-watch(
-    formData,
-    (newData) => {
-        if (newData && JSON.stringify(formDepartment.value) !== JSON.stringify(formData)) {
-
-            formDepartment.value = { ...newData };
-        }
-    },
-    { deep: true }
-);
+const submitDepartment = () => {
+    emits('dataDepartment', { ...formDepartment.value });
+};
 
 const reset = () => {
     emits('reset');
 }
 
-// Emit form data on submit
-const submitDepartment = () => {
-    console.log(formDepartment.value);
-    emits('dataDepartment', { ...formDepartment.value });
-    formDepartment.value.department = '';
-    formDepartment.value.status = false;
-};
+
+watch(
+    formData,
+    (newData) => {
+        if (newData) {
+            formDepartment.value = { ...newData };
+        }
+    },
+    { deep: true }
+);
 </script>

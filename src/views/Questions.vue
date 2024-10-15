@@ -2,22 +2,14 @@
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
       <base-card title="Question Information">
-        <question-form
-          :formData="data"
-          :isUpdate="isUpdate"
-          @dataQuestChoice="submitQuestion"
-          @reset="resetForm"
-        >
+        <question-form :formData="data" :isUpdate="isUpdate" @dataQuestChoice="submitQuestion" @reset="resetForm">
         </question-form>
       </base-card>
     </div>
     <div class="col-span-12 lg:col-span-4 xl:col-span-8">
       <base-card title="Question List">
-        <question-list
-          :questionData="questionData"
-          @update="editQuestionChoices"
-          @delete="removeQuestionChoices"
-        ></question-list>
+        <question-list :questionData="questionData" @update="editQuestionChoices"
+          @delete="removeQuestionChoices"></question-list>
       </base-card>
     </div>
   </div>
@@ -93,7 +85,7 @@ const removeQuestionChoices = (id) => {
 
 const fetchQuestChoice = async () => {
   try {
-    const response = await getQuestionChoicesById(parseInt(props.examId))
+    const response = await getQuestionChoicesById(props.examId)
     console.log(response)
     questionData.value = response.data
   } catch (e) {
@@ -101,13 +93,13 @@ const fetchQuestChoice = async () => {
   }
 }
 
-fetchQuestChoice()
+
 
 const resetForm = () => {
   isUpdate.value = false
 }
 
-// onMounted(() => {
-//   fetchQuestChoice()
-// })
+onMounted(() => {
+  fetchQuestChoice()
+})
 </script>

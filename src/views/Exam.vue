@@ -3,12 +3,7 @@
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <exam-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExam="submitExam"
-            @reset="resetInstance"
-          ></exam-form>
+          <exam-form :isUpdate="isUpdate" :formData="data" @dataExam="submitExam" @reset="resetInstance"></exam-form>
         </template>
       </BaseCard>
     </div>

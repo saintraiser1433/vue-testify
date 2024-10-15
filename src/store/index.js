@@ -1,12 +1,10 @@
 import { createStore } from 'vuex'
 import departmentModule from './modules/department'
 import deansModule from './modules/deans/'
-import examModule from './modules/exam/'
 export default createStore({
   modules: {
     deans: deansModule,
-    department: departmentModule,
-    exam: examModule
+    department: departmentModule
   },
   state: {
     isToggle: true
