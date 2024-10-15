@@ -8,7 +8,12 @@
         <base-button type="button" class="bg-success mr-1" size="small" @click="handleUpdate(item)">
           <i-bx-edit></i-bx-edit>
         </base-button>
-        <base-button type="button" class="bg-danger" size="small" @click="handleDelete(item)">
+        <base-button
+          type="button"
+          class="bg-danger"
+          size="small"
+          @click="handleDelete(item.examinee_id)"
+        >
           <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
         </base-button>
       </td>
@@ -17,22 +22,22 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
-import { useToast } from '@/composables/useToast'
-import { useStore } from 'vuex'
-const { setToast } = useToast()
-const store = useStore()
+import { computed, ref, toRefs } from 'vue'
 
 const emits = defineEmits({
   update: Object,
   delete: Object
 })
+const props = defineProps({
+  examineeData: Object
+})
+
+const { examineeData } = toRefs(props)
 
 const header = ref(['#', 'Fullname', 'Username', 'Action'])
 
-const data = computed(() => store.getters['examinee/getExaminee'])
 const examineeList = computed(() => {
-  return data.value.map((item) => {
+  return examineeData.value.map((item) => {
     const fullname = computed(
       () => item.first_name + ' ' + item.last_name + ' ' + item.middle_name[0] + '.'
     )
@@ -45,18 +50,6 @@ const examineeList = computed(() => {
       username: item.username
     }
   })
-})
-
-const fetchExaminees = async () => {
-  try {
-    await store.dispatch('examinee/fetchExaminees')
-  } catch (e) {
-    setToast('error', e.response.data.error || 'An error occurred')
-  }
-}
-
-onMounted(() => {
-  fetchExaminees()
 })
 
 const handleUpdate = (val) => {

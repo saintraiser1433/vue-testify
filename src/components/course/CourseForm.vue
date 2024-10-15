@@ -33,11 +33,18 @@ const props = defineProps({
 
 const { isUpdate, formData } = toRefs(props)
 
-// Reactive form object
 const formCourse = ref({
   description: '',
   score: null
 })
+
+const reset = () => {
+  emits('reset')
+}
+
+const submitCourse = () => {
+  emits('dataCourse', { ...formCourse.value })
+}
 
 watch(
   formData,
@@ -48,15 +55,4 @@ watch(
   },
   { deep: true }
 )
-
-const reset = () => {
-  emits('reset')
-}
-
-// Emit form data on submit
-const submitCourse = () => {
-  emits('dataCourse', { ...formCourse.value })
-  formCourse.value.description = ''
-  formCourse.value.score = null
-}
 </script>

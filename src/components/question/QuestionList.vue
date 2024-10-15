@@ -38,7 +38,6 @@ import { useConvertLetter } from '@/composables/useConvertLetter'
 const props = defineProps({
   questionData: Object
 })
-
 const { questionData } = toRefs(props)
 const { convertToLetter } = useConvertLetter()
 const emits = defineEmits({

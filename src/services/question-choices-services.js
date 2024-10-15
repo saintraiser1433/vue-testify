@@ -1,15 +1,13 @@
 import apiClient from '@/api/axios'
 
-export const QuestionApi = () => {
-  const getQuestions = () => apiClient.get('/question')
-  const getQuestionById = (id) => apiClient.get(`/question/${id}`)
+export const QuestionChoicesApi = () => {
+  const getQuestionChoicesById = () => apiClient.get(`/question/7`)
   const insertQuestChoices = (data) => apiClient.post('/question', JSON.stringify(data))
   const updateQuestChoices = (data, id) => apiClient.put(`/question/${id}`, JSON.stringify(data))
   const deleteQuestionChoices = (id) => apiClient.delete(`/question/${id}`)
 
   return {
-    getQuestions,
-    getQuestionById,
+    getQuestionChoicesById,
     insertQuestChoices,
     updateQuestChoices,
     deleteQuestionChoices

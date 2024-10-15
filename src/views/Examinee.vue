@@ -3,15 +3,23 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Examinee Information">
         <template #default>
-          <examinee-form :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee"
-            @reset="resetInstance"></examinee-form>
+          <examinee-form
+            :isUpdate="isUpdate"
+            :formData="data"
+            @dataExaminee="submitExaminee"
+            @reset="resetInstance"
+          ></examinee-form>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Examinee's">
         <template #default>
-          <examinee-list @update="editExaminee" @delete="removeExaminee"></examinee-list>
+          <examinee-list
+            :examineeData="examineeData"
+            @update="editExaminee"
+            @delete="removeExaminee"
+          ></examinee-list>
         </template>
       </BaseCard>
     </div>
@@ -24,7 +32,7 @@ import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamineeApi } from '@/services/examinee-services'
 
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, onMounted } from 'vue'
 
 const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'))
 const ExamineeList = defineAsyncComponent(() => import('../components/examinee/ExamineeList.vue'))
@@ -32,27 +40,30 @@ const ExamineeList = defineAsyncComponent(() => import('../components/examinee/E
 const store = useStore()
 const { setToast } = useToast()
 const { setAlert } = useAlert()
-const { insertExaminee, updateExaminee, deleteExaminee } = ExamineeApi()
+const { getExaminee, insertExaminee, updateExaminee, deleteExaminee } = ExamineeApi()
 const data = ref({})
+const examineeData = ref([])
 const isUpdate = ref(false)
 
 /* Examinee */
 const submitExaminee = async (response) => {
   try {
     if (!isUpdate.value) {
-      const res = await insertExaminee(response)
-      store.dispatch('examinee/addExaminee', res.data.data)
-      setToast('success', res.data.message)
+      const resp = await insertExaminee(response)
+      examineeData.value.unshift(resp.data.examinee)
+      setToast('success', resp.data.message)
     } else {
-      const updateData = {
-        first_name: response.first_name,
-        middle_name: response.middle_name,
-        last_name: response.last_name
+      const res = await updateExaminee(response, response.examinee_id)
+      console.log(response)
+      const index = examineeData.value.findIndex(
+        (item) => item.examinee_id === response.examinee_id
+      )
+      if (index !== -1) {
+        examineeData.value[index] = { ...response }
+        return setToast('success', res.data.message)
       }
-      const res = await updateExaminee(updateData, response.examinee_id)
-      store.dispatch('examinee/editExaminee', response)
-      setToast('success', res.data.message)
     }
+    resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   } finally {
@@ -61,24 +72,49 @@ const submitExaminee = async (response) => {
 }
 
 const editExaminee = (response) => {
-  data.value = response
+  data.value = {
+    examinee_id: response.examinee_id,
+    first_name: response.first_name,
+    last_name: response.last_name,
+    middle_name: response.middle_name,
+    username: response.username
+  }
   isUpdate.value = true
 }
-const removeExaminee = (response) => {
+
+const removeExaminee = (id) => {
   setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete').then(
     async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteExaminee(response.examinee_id)
-          store.dispatch('examinee/removeExaminee', response)
-          setToast('success', 'Successfully deleted')
+          const response = await deleteExaminee(id)
+          const index = examineeData.value.findIndex((item) => item.examinee_id === id)
+          if (index !== -1) {
+            examineeData.value.splice(index, 1)
+            return setToast('success', response.data.message)
+          }
+          setToast('error', 'No data existing')
         } catch (e) {
+          console.log(e)
           setToast('error', e.response.data.error || 'An error occurred')
         }
       }
     }
   )
 }
+
+const fetchExaminees = async () => {
+  try {
+    const response = await getExaminee()
+    examineeData.value = response.data
+  } catch (e) {
+    setToast('error', e.response.data.error || 'An error occurred')
+  }
+}
+
+onMounted(() => {
+  fetchExaminees()
+})
 
 const resetInstance = () => {
   isUpdate.value = false

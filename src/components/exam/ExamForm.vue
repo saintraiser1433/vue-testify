@@ -64,9 +64,5 @@ const reset = () => {
 
 const submitExam = () => {
   emits('dataExam', { ...formExam.value })
-  formExam.value.exam_title = ''
-  formExam.value.description = ''
-  formExam.value.time_limit = ''
-  formExam.value.question_limit = ''
 }
 </script>

@@ -8,7 +8,12 @@
         <base-button type="button" class="bg-success mr-1" size="small" @click="handleUpdate(item)">
           <i-bx-edit></i-bx-edit>
         </base-button>
-        <base-button type="button" class="bg-danger" size="small" @click="handleDelete(item)">
+        <base-button
+          type="button"
+          class="bg-danger"
+          size="small"
+          @click="handleDelete(item.course_id)"
+        >
           <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
         </base-button>
       </td>
@@ -17,14 +22,17 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useStore } from 'vuex'
-const store = useStore()
+import { computed, ref, toRefs } from 'vue'
 
 const emits = defineEmits({
   update: Object,
   delete: Object
 })
+
+const props = defineProps({
+  courseData: Object
+})
+const { courseData } = toRefs(props)
 const header = ref(['#', 'Course', 'Score Attained', 'Action'])
 const handleUpdate = (val) => {
   emits('update', val)
@@ -33,16 +41,5 @@ const handleDelete = (val) => {
   emits('delete', val)
 }
 
-const courseList = computed(() => store.getters['course/getCourse'])
-const fetchExaminee = async () => {
-  try {
-    await store.dispatch('course/fetchCourse')
-  } catch (e) {
-    setToast('error', e.response.data.error || 'An error occurred')
-  }
-}
-
-onMounted(() => {
-  fetchExaminee()
-})
+const courseList = computed(() => courseData.value)
 </script>

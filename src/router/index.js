@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { ExamApi } from '@/services/exam-services'
-
+const { getExamById } = ExamApi()
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,14 +35,15 @@ const router = createRouter({
       component: () => import('../views/Exam.vue')
     },
     {
-      path: '/question/:id',
+      path: '/question/:examId',
       name: 'Question',
       component: () => import('../views/Questions.vue'),
       beforeEnter: (to, from, next) => {
-        const questionApi = ExamApi().getExamById(to.params.id)
+        const questionApi = getExamById(to.params.examId)
         questionApi
           .then((response) => {
             if (response.status === 200) {
+              to.meta.examTitle = response.data.exam_title
               next()
             } else {
               next({ name: 'NotFound' })
@@ -51,7 +52,8 @@ const router = createRouter({
           .catch(() => {
             next({ name: 'NotFound' })
           })
-      }
+      },
+      props: true
     },
     {
       path: '/rankings',

@@ -49,29 +49,34 @@ const generateRandomString = () => {
   return nanoid()
 }
 
-watch(
-  formData,
-  (newData) => {
-    if (newData && JSON.stringify(formExaminee.value) !== JSON.stringify(newData)) {
-      formExaminee.value = { ...newData }
+const submitExaminee = () => {
+  let data
+  if (!isUpdate.value) {
+    data = {
+      ...formExaminee.value,
+      username: generateRandomString(),
+      password: generateRandomString()
     }
-  },
-  { deep: true }
-)
+  } else {
+    data = {
+      ...formExaminee.value
+    }
+  }
+  emits('dataExaminee', data)
+}
 
 const reset = () => {
   emits('reset')
 }
 
-// Emit form data on submit
-const submitExaminee = () => {
-  const data = {
-    username: generateRandomString(),
-    password: 'user'
-  }
-  emits('dataExaminee', { ...formExaminee.value, ...data })
-  formExaminee.value.first_name = ''
-  formExaminee.value.middle_name = ''
-  formExaminee.value.last_name = ''
-}
+watch(
+  formData,
+  (newData) => {
+    if (newData && JSON.stringify(formExaminee.value) !== JSON.stringify(newData)) {
+      console.log(newData)
+      formExaminee.value = { ...newData }
+    }
+  },
+  { deep: true }
+)
 </script>

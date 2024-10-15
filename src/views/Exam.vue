@@ -3,14 +3,19 @@
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <exam-form :isUpdate="isUpdate" :formData="data" @dataExam="submitExam" @reset="resetInstance"></exam-form>
+          <exam-form
+            :isUpdate="isUpdate"
+            :formData="data"
+            @dataExam="submitExam"
+            @reset="resetInstance"
+          ></exam-form>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-12 lg:col-span-8 xl:col-span-9">
       <BaseCard title="List of Exam's">
         <template #default>
-          <exam-list @update="editExam" @delete="removeExam"></exam-list>
+          <exam-list :examData="examData" @update="editExam" @delete="removeExam"></exam-list>
         </template>
       </BaseCard>
     </div>
@@ -18,41 +23,34 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamApi } from '@/services/exam-services'
 
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, onMounted } from 'vue'
 
 const ExamForm = defineAsyncComponent(() => import('../components/exam/ExamForm.vue'))
 const ExamList = defineAsyncComponent(() => import('../components/exam/ExamList.vue'))
-
-const store = useStore()
 const { setToast } = useToast()
 const { setAlert } = useAlert()
-const { insertExam, updateExam, deleteExam } = ExamApi()
+const { getExam, insertExam, updateExam, deleteExam } = ExamApi()
 const data = ref({})
 const isUpdate = ref(false)
-
+const examData = ref([])
 /* Exam */
 const submitExam = async (response) => {
   try {
     if (!isUpdate.value) {
-      const res = await insertExam(response)
-      store.dispatch('exam/addExam', res.data.data)
-      setToast('success', res.data.message)
+      const createdExam = await insertExam(response)
+      examData.value.unshift(createdExam.data.exam)
+      setToast('success', createdExam.data.message)
     } else {
-      const updateData = {
-        exam_title: response.exam_title,
-        description: response.description,
-        time_limit: response.time_limit,
-        question_limit: response.question_limit
-      }
-      const res = await updateExam(updateData, response.exam_id)
-      store.dispatch('exam/editExam', response)
-      setToast('success', res.data.message)
+      const updatedExam = await updateExam(response, response.exam_id)
+      const index = examData.value.findIndex((i) => i.exam_id === response.exam_id)
+      examData.value[index] = { ...response }
+      setToast('success', updatedExam.data.message)
     }
+    resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   } finally {
@@ -64,14 +62,15 @@ const editExam = (response) => {
   data.value = response
   isUpdate.value = true
 }
-const removeExam = (response) => {
+const removeExam = (id) => {
   setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete').then(
     async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteExam(response.exam_id)
-          store.dispatch('exam/removeExam', response)
-          setToast('success', 'Successfully deleted')
+          const response = await deleteExam(id)
+          const index = examData.value.findIndex((i) => i.exam_id === id)
+          examData.value.splice(index, 1)
+          setToast('success', response.data.message)
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
         }
@@ -84,4 +83,17 @@ const resetInstance = () => {
   isUpdate.value = false
   data.value = {}
 }
+
+const fetchExam = async () => {
+  try {
+    const response = await getExam()
+    examData.value = response.data
+  } catch (e) {
+    setToast('error', e.response.data.error || 'An error occurred')
+  }
+}
+
+onMounted(() => {
+  fetchExam()
+})
 </script>
