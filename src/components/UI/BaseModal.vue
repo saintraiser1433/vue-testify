@@ -1,18 +1,14 @@
 <template>
     <teleport to="body">
-
-        <div v-show="isToggle" class="h-screen w-screen backdrop-blur-sm bg-black/50 z-50 fixed top-0 left-0">
+        <div v-show="open" class="h-screen w-screen backdrop-blur-sm bg-black/50 z-50 fixed top-0 left-0">
         </div>
-        <div v-show="isToggle"
+        <div v-show="open"
             class="fixed top-1/2 left-1/2 min-h-lg w-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg z-50 bg-cardColor border border-cardColor rounded-lg"
             :class="{
-                'max-w-6xl': size === 'xxxl',
-                'max-w-4xl': size === 'xxl',
-                'max-w-2xl': size === 'xl',
-                'max-w-lg': size === 'large',
-                'max-w-md': size === 'medium',
-                'max-w-sm': size === 'small',
-                'max-w-sm': size === null
+                'xl:max-w-6xl lg:max-w-4xl md:max-w-lg': size === 'large',
+                'xl:max-w-5xl lg:max-w-4xl md:max-w-lg ': size === 'medium',
+                'xl:max-w-lg lg:max-w-md md:max-w-sm': size === 'small',
+                'max-w-md': size === null
             }">
             <div class="flex border-b-2 border-gray-600 justify-between items-center p-3">
                 <h2 class="font-semibold">{{ title }}</h2>
@@ -31,7 +27,7 @@
 <script setup>
 const emits = defineEmits(['close'])
 const props = defineProps({
-    isToggle: Boolean,
+    open: Boolean,
     title: String,
     data: Object,
     size: {

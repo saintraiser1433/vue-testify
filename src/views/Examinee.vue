@@ -3,23 +3,15 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Examinee Information">
         <template #default>
-          <examinee-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExaminee="submitExaminee"
-            @reset="resetInstance"
-          ></examinee-form>
+          <examinee-form :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee"
+            @reset="resetInstance"></examinee-form>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Examinee's">
         <template #default>
-          <examinee-list
-            :examineeData="examineeData"
-            @update="editExaminee"
-            @delete="removeExaminee"
-          ></examinee-list>
+          <examinee-list :examineeData="examineeData" @update="editExaminee" @delete="removeExaminee"></examinee-list>
         </template>
       </BaseCard>
     </div>
@@ -27,23 +19,21 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamineeApi } from '@/services/examinee-services'
-
+import { useLoading } from 'vue-loading-overlay'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
 
 const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'))
 const ExamineeList = defineAsyncComponent(() => import('../components/examinee/ExamineeList.vue'))
-
-const store = useStore()
 const { setToast } = useToast()
 const { setAlert } = useAlert()
 const { getExaminee, insertExaminee, updateExaminee, deleteExaminee } = ExamineeApi()
 const data = ref({})
 const examineeData = ref([])
 const isUpdate = ref(false)
+const $loading = useLoading();
 
 /* Examinee */
 const submitExaminee = async (response) => {
@@ -82,12 +72,18 @@ const removeExaminee = (id) => {
     async (result) => {
       if (result.isConfirmed) {
         try {
+          const loader = $loading.show({
+            "is-full-page": true,
+            "background-color": "#28282B"
+          });
           const response = await deleteExaminee(id)
+          loader.hide();
           const index = examineeData.value.findIndex((item) => item.examinee_id === id)
           if (index !== -1) {
             examineeData.value.splice(index, 1)
             return setToast('success', response.data.message)
           }
+
           setToast('error', 'No data existing')
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
@@ -111,6 +107,7 @@ const resetInstance = () => {
 }
 
 onMounted(() => {
+
   fetchExaminees()
 })
 </script>

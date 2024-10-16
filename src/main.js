@@ -6,7 +6,8 @@ import router from './router'
 import store from './store'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
-
+import { LoadingPlugin } from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 const BaseCard = defineAsyncComponent(() => import('./components/UI/BaseCard.vue'))
 const BaseButton = defineAsyncComponent(() => import('./components/UI/BaseButton.vue'))
 const BaseTable = defineAsyncComponent(() => import('./components/UI/BaseTable.vue'))
@@ -39,5 +40,6 @@ app.component('BaseCheckBox', BaseCheckBox)
 app.use(router)
 app.use(store)
 app.use(VueSweetalert2)
+app.use(LoadingPlugin)
 /* Mount */
 app.mount('#app')

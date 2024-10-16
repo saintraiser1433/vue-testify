@@ -1,8 +1,8 @@
 <template>
-  <BaseTable :data="deansList" :header="header">
+  <BaseTable :data="assignData" :header="header">
     <template #row="{ item, index }">
       <td class="table__block">{{ index + 1 }}</td>
-      <td class="table__block">{{ item.course }}</td>
+      <td class="table__block">{{ item.description }}</td>
       <td class="table__block">
         <base-button type="button" size="small" variant="danger" @click="handleDelete(item)">
           <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
@@ -13,16 +13,19 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useStore } from 'vuex'
+import { ref, toRefs } from 'vue'
 
 const emits = defineEmits(['delete'])
 const header = ref(['#', 'Course Assigned', 'Action'])
 const props = defineProps({
-  courseData: Object
-})
+  assignData: Object
+});
+
+const { assignData } = toRefs(props);
+
+
 
 const handleDelete = (item) => {
-  emits('delete', item.id)
+  emits('delete', item)
 }
 </script>
