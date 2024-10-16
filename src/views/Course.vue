@@ -52,13 +52,10 @@ const submitCourse = async (response) => {
       courseData.value.unshift(createData.data.course)
       setToast('success', createData.data.message)
     } else {
-      console.log(response)
       const updateData = await updateCourse(response, response.course_id)
       const index = courseData.value.findIndex((item) => item.course_id === response.course_id)
-      if (index !== -1) {
-        courseData.value[index] = { ...response }
-        setToast('success', updateData.data.message)
-      }
+      courseData.value[index] = { ...courseData.value[index], ...response }
+      setToast('success', updateData.data.message)
     }
     resetInstance()
   } catch (e) {

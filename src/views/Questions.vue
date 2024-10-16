@@ -2,14 +2,22 @@
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
       <base-card title="Question Information">
-        <question-form :formData="data" :isUpdate="isUpdate" @dataQuestChoice="submitQuestion" @reset="resetForm">
+        <question-form
+          :formData="data"
+          :isUpdate="isUpdate"
+          @dataQuestChoice="submitQuestion"
+          @reset="resetForm"
+        >
         </question-form>
       </base-card>
     </div>
     <div class="col-span-12 lg:col-span-4 xl:col-span-8">
       <base-card title="Question List">
-        <question-list :questionData="questionData" @update="editQuestionChoices"
-          @delete="removeQuestionChoices"></question-list>
+        <question-list
+          :questionData="questionData"
+          @update="editQuestionChoices"
+          @delete="removeQuestionChoices"
+        ></question-list>
       </base-card>
     </div>
   </div>
@@ -45,17 +53,12 @@ const submitQuestion = async (response) => {
       const findIndex = questionData.value.findIndex(
         (item) => item.question_id === response.question_id
       )
-      if (findIndex !== -1) {
-        questionData.value[findIndex] = response
-      }
+      questionData.value[findIndex] = { ...questionData.value[findIndex], ...response }
       setToast('success', res.data.message)
     }
     resetForm()
   } catch (e) {
-    console.log(e)
     setToast('error', e.response.data.error || 'An error occurred')
-  } finally {
-    isUpdate.value = false
   }
 }
 
@@ -86,14 +89,11 @@ const removeQuestionChoices = (id) => {
 const fetchQuestChoice = async () => {
   try {
     const response = await getQuestionChoicesById(props.examId)
-    console.log(response)
     questionData.value = response.data
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   }
 }
-
-
 
 const resetForm = () => {
   isUpdate.value = false

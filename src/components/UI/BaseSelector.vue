@@ -1,24 +1,25 @@
 <template>
-    <select
-        class="rounded-sm py-1 px-2 mt-2 bg-darken outline-none border w-full border-colorBorder focus:border-primary"
-        :value="modelValue" @change="updateModel" required>
-        <option value="" selected>Select First</option>
-        <option v-for="i in data" :key="i.id" :value="i.id">{{ i.value }}</option>
-    </select>
+  <select
+    class="rounded-sm py-1 px-2 mt-2 bg-darken outline-none border w-full border-colorBorder focus:border-primary"
+    :value="modelValue"
+    @change="updateModel"
+  >
+    <option value="" selected>Select First</option>
+    <option v-for="i in data" :key="i.id" :value="i.id">{{ i.value }}</option>
+  </select>
 </template>
 
 <script setup>
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
-    data: {
-        type: Object,
-        required: true
-    },
-    modelValue: [String, Number]
-});
+  data: {
+    type: Object,
+    required: true
+  },
+  modelValue: [String, Number]
+})
 
 const updateModel = (event) => {
-    emits('update:modelValue', event.target.value);
-};
-
+  emits('update:modelValue', event.target.value)
+}
 </script>

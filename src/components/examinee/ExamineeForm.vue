@@ -22,9 +22,8 @@
 
 <script setup>
 import { toRefs, ref, watch } from 'vue'
-import { customAlphabet } from 'nanoid'
+import { useGenerateRandom } from '@/composables/useGenerateRandom'
 const emits = defineEmits(['dataExaminee', 'reset'])
-
 const props = defineProps({
   isUpdate: {
     type: Boolean,
@@ -34,7 +33,7 @@ const props = defineProps({
     type: Object
   }
 })
-
+const { generateRandomString } = useGenerateRandom(8)
 const { isUpdate, formData } = toRefs(props)
 
 const formExaminee = ref({
@@ -42,12 +41,6 @@ const formExaminee = ref({
   middle_name: '',
   last_name: ''
 })
-
-const generateRandomString = () => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const nanoid = customAlphabet(alphabet, 8)
-  return nanoid()
-}
 
 const submitExaminee = () => {
   let data
@@ -73,7 +66,6 @@ watch(
   formData,
   (newData) => {
     if (newData && JSON.stringify(formExaminee.value) !== JSON.stringify(newData)) {
-      console.log(newData)
       formExaminee.value = { ...newData }
     }
   },

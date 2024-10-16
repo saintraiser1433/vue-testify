@@ -54,20 +54,15 @@ const submitExaminee = async (response) => {
       setToast('success', resp.data.message)
     } else {
       const res = await updateExaminee(response, response.examinee_id)
-      console.log(response)
       const index = examineeData.value.findIndex(
         (item) => item.examinee_id === response.examinee_id
       )
-      if (index !== -1) {
-        examineeData.value[index] = { ...response }
-        return setToast('success', res.data.message)
-      }
+      examineeData.value[index] = { ...examineeData.value[index], ...response }
+      setToast('success', res.data.message)
     }
     resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
-  } finally {
-    isUpdate.value = false
   }
 }
 
@@ -95,7 +90,6 @@ const removeExaminee = (id) => {
           }
           setToast('error', 'No data existing')
         } catch (e) {
-          console.log(e)
           setToast('error', e.response.data.error || 'An error occurred')
         }
       }
@@ -111,13 +105,12 @@ const fetchExaminees = async () => {
     setToast('error', e.response.data.error || 'An error occurred')
   }
 }
-
-onMounted(() => {
-  fetchExaminees()
-})
-
 const resetInstance = () => {
   isUpdate.value = false
   data.value = {}
 }
+
+onMounted(() => {
+  fetchExaminees()
+})
 </script>

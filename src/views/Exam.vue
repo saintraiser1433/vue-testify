@@ -3,7 +3,12 @@
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <exam-form :isUpdate="isUpdate" :formData="data" @dataExam="submitExam" @reset="resetInstance"></exam-form>
+          <exam-form
+            :isUpdate="isUpdate"
+            :formData="data"
+            @dataExam="submitExam"
+            @reset="resetInstance"
+          ></exam-form>
         </template>
       </BaseCard>
     </div>
@@ -42,14 +47,12 @@ const submitExam = async (response) => {
     } else {
       const updatedExam = await updateExam(response, response.exam_id)
       const index = examData.value.findIndex((i) => i.exam_id === response.exam_id)
-      examData.value[index] = { ...response }
+      examData.value[index] = { ...examData.value[index], ...response }
       setToast('success', updatedExam.data.message)
     }
     resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
-  } finally {
-    isUpdate.value = false
   }
 }
 
