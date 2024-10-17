@@ -1,25 +1,19 @@
 <template>
+  <BaseLoader :isLoading="isLoading"></BaseLoader>
   <div class="grid grid-cols-5 gap-2">
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Department Information">
         <template #default>
-          <DepartmentForm
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataDepartment="submitDepartment"
-            @reset="resetInstance"
-          ></DepartmentForm>
+          <DepartmentForm :isUpdate="isUpdate" :formData="data" @dataDepartment="submitDepartment"
+            @reset="resetInstance"></DepartmentForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Department's">
         <template #default>
-          <DepartmentList
-            :departmentData="departmentData"
-            @update="editDepartment"
-            @delete="removeDepartment"
-          ></DepartmentList>
+          <DepartmentList :departmentData="departmentData" @update="editDepartment" @delete="removeDepartment">
+          </DepartmentList>
         </template>
       </BaseCard>
     </div>
@@ -42,10 +36,12 @@ const { setToast } = useToast()
 const { setAlert } = useAlert()
 const data = ref({})
 const isUpdate = ref(false)
+const isLoading = ref(false);
 const departmentData = ref([])
 /* Department */
 const submitDepartment = async (response) => {
   try {
+    isLoading.value = true
     if (!isUpdate.value) {
       const createdDepartment = await insertDepartment(response)
       departmentData.value.unshift(createdDepartment.data.data)
@@ -62,7 +58,7 @@ const submitDepartment = async (response) => {
   } catch (err) {
     setToast('error', err.response.data.error)
   } finally {
-    isUpdate.value = false
+    isLoading.value = false
   }
 }
 
@@ -75,12 +71,15 @@ const removeDepartment = (id) => {
     async (result) => {
       if (result.isConfirmed) {
         try {
+          isLoading.value = true
           const res = await deleteDepartment(id)
           const index = departmentData.value.findIndex((item) => item.department_id === id)
           departmentData.value.splice(index, 1)
           setToast('success', res.data.message)
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
+        } finally {
+          isLoading.value = false
         }
       }
     }
@@ -94,11 +93,13 @@ const resetInstance = () => {
 
 const fetchDepartment = async () => {
   try {
+    isLoading.value = true
     const response = await getDepartment()
-
     departmentData.value = response.data
   } catch (err) {
     setToast('error', err.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 

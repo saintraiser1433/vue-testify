@@ -1,31 +1,18 @@
 <template>
-  <loading-overlay
-    :active="isLoading"
-    :is-full-page="true"
-    :loader="loader"
-    :backgroundColor="bgOverlayColor"
-  />
+  <BaseLoader :isLoading="isLoading"></BaseLoader>
   <div class="grid grid-cols-5 gap-2">
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Examinee Information">
         <template #default>
-          <ExamineeForm
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExaminee="submitExaminee"
-            @reset="resetInstance"
-          ></ExamineeForm>
+          <ExamineeForm :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee" @reset="resetInstance">
+          </ExamineeForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Examinee's">
         <template #default>
-          <ExamineeList
-            :examineeData="examineeData"
-            @update="editExaminee"
-            @delete="removeExaminee"
-          ></ExamineeList>
+          <ExamineeList :examineeData="examineeData" @update="editExaminee" @delete="removeExaminee"></ExamineeList>
         </template>
       </BaseCard>
     </div>
@@ -33,6 +20,7 @@
 </template>
 
 <script setup>
+import BaseLoader from '@/components/UI/BaseLoader.vue';
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamineeApi } from '@/services/examinee-services'
@@ -46,9 +34,7 @@ const { getExaminee, insertExaminee, updateExaminee, deleteExaminee } = Examinee
 const data = ref({})
 const examineeData = ref([])
 const isUpdate = ref(false)
-const loader = ref('spinner')
 const isLoading = ref(false)
-const bgOverlayColor = ref('#343434')
 /* Examinee */
 const submitExaminee = async (response) => {
   try {
@@ -65,6 +51,7 @@ const submitExaminee = async (response) => {
       examineeData.value[index] = { ...examineeData.value[index], ...response }
       setToast('success', res.data.message)
     }
+    resetInstance();
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   } finally {

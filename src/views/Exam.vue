@@ -1,14 +1,10 @@
 <template>
+  <BaseLoader :isLoading="isLoading"></BaseLoader>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <ExamForm
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataExam="submitExam"
-            @reset="resetInstance"
-          ></ExamForm>
+          <ExamForm :isUpdate="isUpdate" :formData="data" @dataExam="submitExam" @reset="resetInstance"></ExamForm>
         </template>
       </BaseCard>
     </div>
@@ -37,9 +33,11 @@ const { getExam, insertExam, updateExam, deleteExam } = ExamApi()
 const data = ref({})
 const isUpdate = ref(false)
 const examData = ref([])
+const isLoading = ref(false)
 /* Exam */
 const submitExam = async (response) => {
   try {
+    isLoading.value = true
     if (!isUpdate.value) {
       const createdExam = await insertExam(response)
       examData.value.unshift(createdExam.data.exam)
@@ -53,6 +51,8 @@ const submitExam = async (response) => {
     resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -65,12 +65,15 @@ const removeExam = (id) => {
     async (result) => {
       if (result.isConfirmed) {
         try {
+          isLoading.value = true
           const response = await deleteExam(id)
           const index = examData.value.findIndex((i) => i.exam_id === id)
           examData.value.splice(index, 1)
           setToast('success', response.data.message)
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
+        } finally {
+          isLoading.value = false
         }
       }
     }
@@ -84,10 +87,13 @@ const resetInstance = () => {
 
 const fetchExam = async () => {
   try {
+    isLoading.value = true
     const response = await getExam()
     examData.value = response.data
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 

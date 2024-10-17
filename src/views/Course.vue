@@ -1,14 +1,11 @@
 <template>
+  <BaseLoader :isLoading="isLoading"></BaseLoader>
   <div class="grid grid-cols-5 gap-2">
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Course Information">
         <template #default>
-          <course-form
-            :isUpdate="isUpdate"
-            :formData="data"
-            @dataCourse="submitCourse"
-            @reset="resetInstance"
-          ></course-form>
+          <course-form :isUpdate="isUpdate" :formData="data" @dataCourse="submitCourse"
+            @reset="resetInstance"></course-form>
         </template>
       </BaseCard>
     </div>
@@ -16,11 +13,7 @@
       <BaseCard title="List of Course's">
         <!-- :formData="editExaminee" -->
         <template #default>
-          <course-list
-            :courseData="courseData"
-            @update="editCourse"
-            @delete="removeCourse"
-          ></course-list>
+          <course-list :courseData="courseData" @update="editCourse" @delete="removeCourse"></course-list>
         </template>
       </BaseCard>
     </div>
@@ -28,7 +21,6 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { useToast } from '@/composables/useToast'
 import { useAlert } from '@/composables/useAlert'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
@@ -42,11 +34,13 @@ const { getCourse, insertCourse, updateCourse, deleteCourse } = CourseApi()
 
 const data = ref({})
 const isUpdate = ref(false)
+const isLoading = ref(false)
 const courseData = ref([])
 /* Examinee */
 
 const submitCourse = async (response) => {
   try {
+    isLoading.value = true
     if (!isUpdate.value) {
       const createData = await insertCourse(response)
       courseData.value.unshift(createData.data.course)
@@ -61,7 +55,7 @@ const submitCourse = async (response) => {
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
   } finally {
-    isUpdate.value = false
+    isLoading.value = false
   }
 }
 
@@ -74,6 +68,7 @@ const removeCourse = (id) => {
     async (result) => {
       if (result.isConfirmed) {
         try {
+          isLoading.value = true
           const deleteResult = await deleteCourse(id)
           const index = courseData.value.findIndex((item) => item.course_id === id)
           if (index !== -1) {
@@ -82,6 +77,8 @@ const removeCourse = (id) => {
           }
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
+        } finally {
+          isLoading.value = false
         }
       }
     }
@@ -95,10 +92,13 @@ const resetInstance = () => {
 
 const fetchCourse = async () => {
   try {
+    isLoading.value = true
     const response = await getCourse()
     courseData.value = response.data
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 

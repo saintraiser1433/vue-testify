@@ -2,22 +2,14 @@
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
       <base-card title="Question Information">
-        <QuestionForm
-          :formData="data"
-          :isUpdate="isUpdate"
-          @dataQuestChoice="submitQuestion"
-          @reset="resetForm"
-        >
+        <QuestionForm :formData="data" :isUpdate="isUpdate" @dataQuestChoice="submitQuestion" @reset="resetForm">
         </QuestionForm>
       </base-card>
     </div>
     <div class="col-span-12 lg:col-span-4 xl:col-span-8">
       <base-card title="Question List">
-        <QuestionList
-          :questionData="questionData"
-          @update="editQuestionChoices"
-          @delete="removeQuestionChoices"
-        ></QuestionList>
+        <QuestionList :questionData="questionData" @update="editQuestionChoices" @delete="removeQuestionChoices">
+        </QuestionList>
       </base-card>
     </div>
   </div>
@@ -44,6 +36,7 @@ const props = defineProps({
 
 const submitQuestion = async (response) => {
   try {
+    isLoading.value = true
     if (!isUpdate.value) {
       const res = await insertQuestChoices(response)
       questionData.value.unshift(res.data.data)
@@ -59,6 +52,8 @@ const submitQuestion = async (response) => {
     resetForm()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -72,6 +67,7 @@ const removeQuestionChoices = (id) => {
     async (result) => {
       if (result.isConfirmed) {
         try {
+          isLoading.value = true
           const res = await deleteQuestionChoices(id)
           const findIndex = questionData.value.findIndex((item) => item.question_id === id)
           if (findIndex !== -1) {
@@ -80,6 +76,8 @@ const removeQuestionChoices = (id) => {
           }
         } catch (e) {
           setToast('error', e.response.data.error || 'An error occurred')
+        } finally {
+          isLoading.value = false
         }
       }
     }
@@ -88,10 +86,13 @@ const removeQuestionChoices = (id) => {
 
 const fetchQuestChoice = async () => {
   try {
+    isLoading.value = true
     const response = await getQuestionChoicesById(props.examId)
     questionData.value = response.data
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 

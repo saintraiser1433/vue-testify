@@ -20,7 +20,7 @@ const BaseSelector = defineAsyncComponent(() => import('./components/UI/BaseSele
 const BaseModal = defineAsyncComponent(() => import('./components/UI/BaseModal.vue'))
 const BaseTextArea = defineAsyncComponent(() => import('./components/UI/BaseTextArea.vue'))
 const BaseCheckBox = defineAsyncComponent(() => import('./components/UI/BaseCheckBox.vue'))
-
+const BaseLoader = defineAsyncComponent(() => import('./components/UI/BaseLoader.vue'))
 /* Components */
 const app = createApp(App)
 app.component('BaseCard', BaseCard)
@@ -36,6 +36,7 @@ app.component('BaseModal', BaseModal)
 app.component('BaseTextArea', BaseTextArea)
 app.component('BaseCheckBox', BaseCheckBox)
 app.component('loading-overlay', Loading)
+app.component('BaseLoader', BaseLoader)
 /* Use */
 
 app.use(router)

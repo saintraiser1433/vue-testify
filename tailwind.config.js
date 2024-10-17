@@ -4,6 +4,10 @@ export default {
   theme: {
     screens: {
       // sm: { max: '767px' },
+      // md: { max: '975px' },
+      // lg: { min: '976px', max: '1439px' },
+      // xl: { min: '1440px' }
+      sm: { max: '639px' },
       md: { max: '975px' },
       lg: { min: '976px', max: '1439px' },
       xl: { min: '1440px' }

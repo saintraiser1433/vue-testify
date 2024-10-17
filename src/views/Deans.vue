@@ -1,21 +1,11 @@
 <template>
-  <loading-overlay
-    :active="isLoading"
-    :is-full-page="true"
-    :loader="loader"
-    :backgroundColor="bgOverlayColor"
-  />
+  <BaseLoader :isLoading="isLoading"></BaseLoader>
   <BaseModal :open="isOpen" size="large" title="Add Assignee" @close="closeModal">
     <template #default>
       <div class="grid grid-cols-12 gap-5">
         <div class="col-span-12 lg:col-span-4 xl:col-span-4">
-          <AssignForm
-            :courseList="coursesList"
-            :deansId="deansId"
-            :formData="data"
-            @dataAssign="submitAssignCourse"
-            @reset="resetInstance"
-          ></AssignForm>
+          <AssignForm :courseList="coursesList" :deansId="deansId" :formData="data" @dataAssign="submitAssignCourse"
+            @reset="resetInstance"></AssignForm>
         </div>
         <div class="col-span-12 lg:col-span-8 xl:col-span-8">
           <AssignList :assignData="assignDeanCourses" @delete="removeDeansCourse"></AssignList>
@@ -28,25 +18,16 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Deans Information">
         <template #default>
-          <DeansForm
-            :isUpdate="isUpdate"
-            :formData="data"
-            :departmentData="departmentData"
-            @dataDeans="submitDeans"
-            @reset="resetInstance"
-          ></DeansForm>
+          <DeansForm :isUpdate="isUpdate" :formData="data" :departmentData="departmentData" @dataDeans="submitDeans"
+            @reset="resetInstance"></DeansForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Dean's">
         <template #default>
-          <DeansList
-            :deansData="deansData"
-            :departmentData="departmentData"
-            @assign="assignDeans"
-            @update="editDeans"
-          ></DeansList>
+          <DeansList :deansData="deansData" :departmentData="departmentData" @assign="assignDeans" @update="editDeans">
+          </DeansList>
         </template>
       </BaseCard>
     </div>
@@ -61,6 +42,7 @@ import { DeansApi } from '@/services/deans-services'
 import { DepartmentApi } from '@/services/department-services'
 import { CourseApi } from '@/services/course-services'
 import { useModal } from '@/composables/useModal'
+import BaseLoader from '@/components/UI/BaseLoader.vue'
 const DeansForm = defineAsyncComponent(() => import('../components/deans/DeansForm.vue'))
 const DeansList = defineAsyncComponent(() => import('../components/deans/DeansList.vue'))
 const AssignForm = defineAsyncComponent(() => import('../components/deans/DeansAssignForm.vue'))
@@ -78,10 +60,8 @@ const {
 } = DeansApi()
 const { getCourse } = CourseApi()
 const isUpdate = ref(false)
-
-const loader = ref('spinner')
 const isLoading = ref(false)
-const bgOverlayColor = ref('#343434')
+
 
 /* Add Deans */
 
