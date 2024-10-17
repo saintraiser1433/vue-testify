@@ -1,17 +1,31 @@
 <template>
+  <loading-overlay
+    :active="isLoading"
+    :is-full-page="true"
+    :loader="loader"
+    :backgroundColor="bgOverlayColor"
+  />
   <div class="grid grid-cols-5 gap-2">
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Examinee Information">
         <template #default>
-          <examinee-form :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee"
-            @reset="resetInstance"></examinee-form>
+          <ExamineeForm
+            :isUpdate="isUpdate"
+            :formData="data"
+            @dataExaminee="submitExaminee"
+            @reset="resetInstance"
+          ></ExamineeForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Examinee's">
         <template #default>
-          <examinee-list :examineeData="examineeData" @update="editExaminee" @delete="removeExaminee"></examinee-list>
+          <ExamineeList
+            :examineeData="examineeData"
+            @update="editExaminee"
+            @delete="removeExaminee"
+          ></ExamineeList>
         </template>
       </BaseCard>
     </div>
@@ -22,7 +36,6 @@
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamineeApi } from '@/services/examinee-services'
-import { useLoading } from 'vue-loading-overlay'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
 
 const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'))
@@ -33,11 +46,13 @@ const { getExaminee, insertExaminee, updateExaminee, deleteExaminee } = Examinee
 const data = ref({})
 const examineeData = ref([])
 const isUpdate = ref(false)
-const $loading = useLoading();
-
+const loader = ref('spinner')
+const isLoading = ref(false)
+const bgOverlayColor = ref('#343434')
 /* Examinee */
 const submitExaminee = async (response) => {
   try {
+    isLoading.value = true
     if (!isUpdate.value) {
       const resp = await insertExaminee(response)
       examineeData.value.unshift(resp.data.examinee)
@@ -50,9 +65,10 @@ const submitExaminee = async (response) => {
       examineeData.value[index] = { ...examineeData.value[index], ...response }
       setToast('success', res.data.message)
     }
-    resetInstance()
   } catch (e) {
     setToast('error', e.response.data.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -71,22 +87,19 @@ const removeExaminee = (id) => {
   setAlert('warning', 'Are you sure you want to delete?', null, 'Confirm delete').then(
     async (result) => {
       if (result.isConfirmed) {
+        isLoading.value = true
         try {
-          const loader = $loading.show({
-            "is-full-page": true,
-            "background-color": "#28282B"
-          });
           const response = await deleteExaminee(id)
-          loader.hide();
           const index = examineeData.value.findIndex((item) => item.examinee_id === id)
           if (index !== -1) {
             examineeData.value.splice(index, 1)
             return setToast('success', response.data.message)
           }
-
           setToast('error', 'No data existing')
         } catch (e) {
-          setToast('error', e.response.data.error || 'An error occurred')
+          setToast('error', e.response?.data?.error || 'An error occurred')
+        } finally {
+          isLoading.value = false
         }
       }
     }
@@ -94,11 +107,14 @@ const removeExaminee = (id) => {
 }
 
 const fetchExaminees = async () => {
+  isLoading.value = true
   try {
     const response = await getExaminee()
     examineeData.value = response.data
   } catch (e) {
-    setToast('error', e.response.data.error || 'An error occurred')
+    setToast('error', e.response?.data?.error || 'An error occurred')
+  } finally {
+    isLoading.value = false
   }
 }
 const resetInstance = () => {
@@ -107,7 +123,6 @@ const resetInstance = () => {
 }
 
 onMounted(() => {
-
   fetchExaminees()
 })
 </script>

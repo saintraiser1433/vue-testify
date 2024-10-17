@@ -2,22 +2,22 @@
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-4 xl:col-span-4">
       <base-card title="Question Information">
-        <question-form
+        <QuestionForm
           :formData="data"
           :isUpdate="isUpdate"
           @dataQuestChoice="submitQuestion"
           @reset="resetForm"
         >
-        </question-form>
+        </QuestionForm>
       </base-card>
     </div>
     <div class="col-span-12 lg:col-span-4 xl:col-span-8">
       <base-card title="Question List">
-        <question-list
+        <QuestionList
           :questionData="questionData"
           @update="editQuestionChoices"
           @delete="removeQuestionChoices"
-        ></question-list>
+        ></QuestionList>
       </base-card>
     </div>
   </div>

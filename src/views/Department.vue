@@ -3,23 +3,23 @@
     <div class="col-span-5 lg:col-span-2 xl:col-span-2">
       <BaseCard title="Department Information">
         <template #default>
-          <department-form
+          <DepartmentForm
             :isUpdate="isUpdate"
             :formData="data"
             @dataDepartment="submitDepartment"
             @reset="resetInstance"
-          ></department-form>
+          ></DepartmentForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-5 lg:col-span-3 xl:col-span-3">
       <BaseCard title="List of Department's">
         <template #default>
-          <department-list
+          <DepartmentList
             :departmentData="departmentData"
             @update="editDepartment"
             @delete="removeDepartment"
-          ></department-list>
+          ></DepartmentList>
         </template>
       </BaseCard>
     </div>

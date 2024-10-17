@@ -2,21 +2,24 @@
   <form @submit.prevent="submitExaminee">
     <div class="mb-2">
       <label for="firstname">First Name</label>
-      <base-input type="text" id="firstname" v-model="formExaminee.first_name" />
+      <base-input type="text" id="firstname" v-model="formExaminee.first_name" required />
     </div>
     <div class="mb-2">
       <label for="middlename">Middle Name</label>
-      <base-input type="text" id="middlename" v-model="formExaminee.middle_name" />
+      <base-input type="text" id="middlename" v-model="formExaminee.middle_name" required />
     </div>
     <div class="mb-2">
       <label for="lastname">Last Name</label>
-      <base-input type="text" id="lastname" v-model="formExaminee.last_name" />
+      <base-input type="text" id="lastname" v-model="formExaminee.last_name" required />
     </div>
-
-    <base-button type="submit" class="bg-primary">{{ isUpdate ? 'Update' : 'Submit' }}</base-button>
-    <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-      >Reset</base-button
-    >
+    <div class="border-t border-colorBorder pt-2">
+      <base-button type="submit" class="bg-primary">
+        {{ isUpdate ? 'Update' : 'Submit' }}
+      </base-button>
+      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset">
+        Reset
+      </base-button>
+    </div>
   </form>
 </template>
 

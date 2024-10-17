@@ -11,10 +11,22 @@
         </base-badge>
       </td>
       <td class="table__block">
-        <base-button type="button" variant="primary" size="small" class="mr-1" @click="assignDeans(item.deans_id)">
+        <base-button
+          type="button"
+          variant="primary"
+          size="small"
+          class="mr-1"
+          @click="assignDeans(item.deans_id)"
+        >
           <i-gridicons-add-outline></i-gridicons-add-outline>
         </base-button>
-        <base-button type="button" variant="success" size="small" class="mr-1" @click="handleUpdate(item)">
+        <base-button
+          type="button"
+          variant="success"
+          size="small"
+          class="mr-1"
+          @click="handleUpdate(item)"
+        >
           <i-bx-edit></i-bx-edit>
         </base-button>
         <!-- <base-button
@@ -50,6 +62,7 @@ const deansList = computed(() => {
     const department = departmentData.value.find(
       (dept) => dept.department_id === item.department_id
     )
+
     return {
       deans_id: item.deans_id,
       fullname: fullname,
@@ -71,5 +84,4 @@ const assignDeans = (id) => {
 const handleUpdate = (item) => {
   emits('update', item)
 }
-
 </script>

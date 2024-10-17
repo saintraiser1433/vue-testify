@@ -1,6 +1,6 @@
 <template>
   <select
-    class="rounded-sm py-1 px-2 mt-2 bg-darken outline-none border w-full border-colorBorder focus:border-primary"
+    class="rounded-sm py-1 px-2 mt-2 bg-darken outline-none border w-full capitalize border-colorBorder focus:border-primary"
     :value="modelValue"
     @change="updateModel"
   >

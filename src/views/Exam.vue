@@ -3,19 +3,19 @@
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
-          <exam-form
+          <ExamForm
             :isUpdate="isUpdate"
             :formData="data"
             @dataExam="submitExam"
             @reset="resetInstance"
-          ></exam-form>
+          ></ExamForm>
         </template>
       </BaseCard>
     </div>
     <div class="col-span-12 lg:col-span-8 xl:col-span-9">
       <BaseCard title="List of Exam's">
         <template #default>
-          <exam-list :examData="examData" @update="editExam" @delete="removeExam"></exam-list>
+          <ExamList :examData="examData" @update="editExam" @delete="removeExam"></ExamList>
         </template>
       </BaseCard>
     </div>

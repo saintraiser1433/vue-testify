@@ -20,10 +20,14 @@
       <label for="status">Status:</label>
       <base-switch v-model="formDeans.status"></base-switch>
     </div>
-    <base-button type="submit" class="bg-primary">{{ isUpdate ? 'Update' : 'Submit' }}</base-button>
-    <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-      >Reset</base-button
-    >
+    <div class="border-t border-colorBorder pt-2">
+      <base-button type="submit" class="bg-primary">{{
+        isUpdate ? 'Update' : 'Submit'
+      }}</base-button>
+      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
+        >Reset</base-button
+      >
+    </div>
   </form>
 </template>
 
