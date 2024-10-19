@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-between items-center md:flex-col lg:flex-row xl:flex-row">
-    <div class="p-2 lg:text-sm xl:text-sm">
+  <div class="flex justify-between items-center flex-col lg:flex-row">
+    <div class="p-2 lg:text-sm">
       <span>Show</span>
       <select class="mx-2 rounded-sm py-1 px-2 bg-darken outline-none border border-colorBorder focus:border-primary"
         v-model="showEntries">
@@ -13,7 +13,7 @@
       <span>Entries</span>
     </div>
 
-    <div class="flex justify-center items-center mb-2 lg:text-sm xl:text-sm">
+    <div class="flex justify-center items-center mb-2 lg:text-sm">
       <span class="mr-2">Search:</span>
       <base-input v-model="searchInput"></base-input>
     </div>
@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody v-if="paginatedData && paginatedData.length > 0">
-        <tr class="border-b border-colorBorder" v-for="(item, index) in paginatedData" :key="item.id">
+        <tr class="border-b border-colorBorder text-xs" v-for="(item, index) in paginatedData" :key="index">
           <slot name="row" :item="item" :index="index" />
         </tr>
       </tbody>
@@ -42,8 +42,8 @@
     </table>
   </div>
 
-  <div class="flex flex-col lg:flex-row xl:flex-row py-1 items-center lg:text-sm xl:text-sm">
-    <span class="font-light opacity-50 text-center flex-grow lg:text-left xl:text-left">
+  <div class="flex flex-col lg:flex-row text-sm py-1 items-center ">
+    <span class="font-light opacity-50 text-center flex-grow lg:text-left">
       Showing {{ paginatedData.length }} out of {{ filteredTableData.length }}
     </span>
     <ul class="pagination">

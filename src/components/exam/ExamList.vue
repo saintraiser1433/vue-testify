@@ -9,23 +9,13 @@
       <td class="table__block text-center">{{ item.time_limit }}</td>
       <td class="table__block text-center">{{ item.question_limit }}</td>
       <td class="table__block">
-        <base-button
-          type="button"
-          class="bg-info mr-1"
-          size="small"
-          @click="setSelect(item.exam_id)"
-        >
+        <base-button type="button" class="bg-info mr-1" size="small" @click="setSelect(item.exam_id)">
           <i-lets-icons-question-duotone></i-lets-icons-question-duotone>
         </base-button>
         <base-button type="button" class="bg-success mr-1" size="small" @click="handleUpdate(item)">
           <i-bx-edit></i-bx-edit>
         </base-button>
-        <base-button
-          type="button"
-          class="bg-danger"
-          size="small"
-          @click="handleDelete(item.exam_id)"
-        >
+        <base-button type="button" class="bg-danger" size="small" @click="handleDelete(item.exam_id)">
           <i-icon-park-solid-people-delete></i-icon-park-solid-people-delete>
         </base-button>
       </td>

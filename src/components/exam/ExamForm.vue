@@ -1,28 +1,26 @@
 <template>
   <form @submit.prevent="submitExam">
     <div class="mb-2">
-      <label for="course">Exam Title:</label>
-      <base-input type="text" id="course" v-model="formExam.exam_title" required />
+      <label class="text-sm" for="exam">Exam Title:</label>
+      <base-input type="text" id="exam" v-model="formExam.exam_title" required />
     </div>
     <div class="mb-2">
-      <label for="course">Exam Description:</label>
-      <base-input type="text" id="course" v-model="formExam.description" required />
+      <label class="text-sm" for="description">Exam Description:</label>
+      <base-input type="text" id="description" v-model="formExam.description" required />
     </div>
     <div class="mb-2">
-      <label for="score">Time Limit:</label>
+      <label class="text-sm" for="score">Time Limit:</label>
       <base-input type="number" id="score" v-model.number="formExam.time_limit" required />
     </div>
     <div class="mb-2">
-      <label for="score">Question Limit:</label>
-      <base-input type="number" id="score" v-model.number="formExam.question_limit" required />
+      <label class="text-sm" for="question">Question Limit:</label>
+      <base-input type="number" id="question" v-model.number="formExam.question_limit" required />
     </div>
     <div class="border-t border-colorBorder pt-2">
       <base-button type="submit" class="bg-primary">{{
         isUpdate ? 'Update' : 'Submit'
       }}</base-button>
-      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-        >Reset</base-button
-      >
+      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset">Reset</base-button>
     </div>
   </form>
 </template>

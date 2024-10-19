@@ -8,19 +8,20 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-loading-overlay/dist/css/index.css'
 import Loading from 'vue-loading-overlay'
-const BaseCard = defineAsyncComponent(() => import('./components/UI/BaseCard.vue'))
-const BaseButton = defineAsyncComponent(() => import('./components/UI/BaseButton.vue'))
-const BaseTable = defineAsyncComponent(() => import('./components/UI/BaseTable.vue'))
-const BaseCollapsible = defineAsyncComponent(() => import('./components/UI/BaseCollapsible.vue'))
-const BaseList = defineAsyncComponent(() => import('./components/UI/BaseList.vue'))
-const BaseInput = defineAsyncComponent(() => import('./components/UI/BaseInput.vue'))
-const BaseBadge = defineAsyncComponent(() => import('./components/UI/BaseBadge.vue'))
-const BaseSwitch = defineAsyncComponent(() => import('./components/UI/BaseSwitch.vue'))
-const BaseSelector = defineAsyncComponent(() => import('./components/UI/BaseSelector.vue'))
-const BaseModal = defineAsyncComponent(() => import('./components/UI/BaseModal.vue'))
-const BaseTextArea = defineAsyncComponent(() => import('./components/UI/BaseTextArea.vue'))
-const BaseCheckBox = defineAsyncComponent(() => import('./components/UI/BaseCheckBox.vue'))
-const BaseLoader = defineAsyncComponent(() => import('./components/UI/BaseLoader.vue'))
+import BaseCard from './components/UI/BaseCard.vue'
+import BaseButton from './components/UI/BaseButton.vue'
+import BaseTable from './components/UI/BaseTable.vue'
+import BaseCollapsible from './components/UI/BaseCollapsible.vue'
+import BaseList from './components/UI/BaseList.vue'
+import BaseInput from './components/UI/BaseInput.vue'
+import BaseBadge from './components/UI/BaseBadge.vue'
+import BaseSwitch from './components/UI/BaseSwitch.vue'
+import BaseSelector from './components/UI/BaseSelector.vue'
+import BaseModal from './components/UI/BaseModal.vue'
+import BaseTextArea from './components/UI/BaseTextArea.vue'
+import BaseCheckBox from './components/UI/BaseCheckBox.vue'
+import BaseLoader from './components/UI/BaseLoader.vue'
+import BaseBreadCrumbs from './components/UI/BaseBreadCrumbs.vue'
 /* Components */
 const app = createApp(App)
 app.component('BaseCard', BaseCard)
@@ -37,6 +38,7 @@ app.component('BaseTextArea', BaseTextArea)
 app.component('BaseCheckBox', BaseCheckBox)
 app.component('loading-overlay', Loading)
 app.component('BaseLoader', BaseLoader)
+app.component('BaseBreadCrumbs', BaseBreadCrumbs)
 /* Use */
 
 app.use(router)

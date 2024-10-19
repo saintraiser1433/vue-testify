@@ -1,7 +1,7 @@
 <template>
-  <BaseLoader :isLoading="isLoading"></BaseLoader>
-  <div class="grid grid-cols-5 gap-2">
-    <div class="col-span-5 lg:col-span-2 xl:col-span-2">
+  <!-- <BaseLoader :isLoading="isLoading"></BaseLoader> -->
+  <div class="grid grid-cols-5 gap-5">
+    <div class="col-span-5 lg:col-span-1">
       <BaseCard title="Course Information">
         <template #default>
           <course-form :isUpdate="isUpdate" :formData="data" @dataCourse="submitCourse"
@@ -9,7 +9,7 @@
         </template>
       </BaseCard>
     </div>
-    <div class="col-span-5 lg:col-span-3 xl:col-span-3">
+    <div class="col-span-5 lg:col-span-4">
       <BaseCard title="List of Course's">
         <!-- :formData="editExaminee" -->
         <template #default>
@@ -25,8 +25,10 @@ import { useToast } from '@/composables/useToast'
 import { useAlert } from '@/composables/useAlert'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
 import { CourseApi } from '@/services/course-services'
-const CourseForm = defineAsyncComponent(() => import('../components/course/CourseForm.vue'))
-const CourseList = defineAsyncComponent(() => import('../components/course/CourseList.vue'))
+import CourseForm from '@/components/course/CourseForm.vue';
+import CourseList from '@/components/course/CourseList.vue';
+// const CourseForm = defineAsyncComponent(() => import('../components/course/CourseForm.vue'))
+// const CourseList = defineAsyncComponent(() => import('../components/course/CourseList.vue'))
 
 const { setToast } = useToast()
 const { setAlert } = useAlert()

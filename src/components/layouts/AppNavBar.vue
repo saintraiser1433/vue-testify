@@ -1,11 +1,8 @@
 <template>
-  <div class="bg-darken py-2 border-b border-[#818181] border-opacity-10 top-0 fixed w-screen">
-    <div class="container mx-auto flex justify-between px-5">
-      <a class="md:hidden text-2xl font-bold font-titleFont flex gap-2">
-        <i-mingcute-vue-fill class="text-primary" />
-        <span>Testify</span>
-      </a>
-      <button class="lg:hidden xl:hidden" @click="setSelected"><i-solar-list-linear /></button>
+  <div :class="isOpen ? ' lg:w-[calc(100%-15rem)] lg:left-60' : 'lg:w-[calc(100%-5rem)] lg:left-20'"
+    class="bg-darken py-2 border-b border-[#818181] border-opacity-10 fixed top-0  w-full col-span-2 transition-all ease-in-out">
+    <div class="mx-auto flex justify-between px-5">
+      <button @click="toggle"><i-solar-list-linear /></button>
       <ul class="grid grid-cols-6 place-items-center">
         <li>
           <a href="google.com"><i-bx-search /></a>
@@ -26,10 +23,12 @@
 
 <script setup>
 import { useStore } from 'vuex'
+import { computed } from 'vue';
+const store = useStore();
+const isOpen = computed(() => store.getters.getToggleState);
 
-const store = useStore()
 
-const setSelected = () => {
-  store.dispatch('setToggle', true)
+const toggle = () => {
+  store.dispatch('setToggle', !isOpen.value)
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <BaseLoader :isLoading="isLoading"></BaseLoader>
-  <div class="grid grid-cols-5 gap-2">
-    <div class="col-span-5 lg:col-span-2 xl:col-span-2">
+  <!-- <BaseLoader :isLoading="isLoading"></BaseLoader> -->
+  <div class="grid grid-cols-5 gap-5">
+    <div class="col-span-5 lg:col-span-1 ">
       <BaseCard title="Examinee Information">
         <template #default>
           <ExamineeForm :isUpdate="isUpdate" :formData="data" @dataExaminee="submitExaminee" @reset="resetInstance">
@@ -9,7 +9,7 @@
         </template>
       </BaseCard>
     </div>
-    <div class="col-span-5 lg:col-span-3 xl:col-span-3">
+    <div class="col-span-5 lg:col-span-4 ">
       <BaseCard title="List of Examinee's">
         <template #default>
           <ExamineeList :examineeData="examineeData" @update="editExaminee" @delete="removeExaminee"></ExamineeList>
@@ -24,10 +24,11 @@ import BaseLoader from '@/components/UI/BaseLoader.vue';
 import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamineeApi } from '@/services/examinee-services'
-import { defineAsyncComponent, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 
-const ExamineeForm = defineAsyncComponent(() => import('../components/examinee/ExamineeForm.vue'))
-const ExamineeList = defineAsyncComponent(() => import('../components/examinee/ExamineeList.vue'))
+import ExamineeForm from '@/components/examinee/ExamineeForm.vue';
+import ExamineeList from '@/components/examinee/ExamineeList.vue'
+
 const { setToast } = useToast()
 const { setAlert } = useAlert()
 const { getExaminee, insertExaminee, updateExaminee, deleteExaminee } = ExamineeApi()

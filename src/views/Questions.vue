@@ -1,12 +1,12 @@
 <template>
-  <div class="grid grid-cols-12 gap-2">
-    <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+  <div class="grid grid-cols-8 gap-5">
+    <div class="col-span-12 lg:col-span-2">
       <base-card title="Question Information">
         <QuestionForm :formData="data" :isUpdate="isUpdate" @dataQuestChoice="submitQuestion" @reset="resetForm">
         </QuestionForm>
       </base-card>
     </div>
-    <div class="col-span-12 lg:col-span-4 xl:col-span-8">
+    <div class="col-span-12 lg:col-span-6 ">
       <base-card title="Question List">
         <QuestionList :questionData="questionData" @update="editQuestionChoices" @delete="removeQuestionChoices">
         </QuestionList>
@@ -30,6 +30,7 @@ const { setAlert } = useAlert()
 const data = ref({})
 const questionData = ref([])
 const isUpdate = ref(false)
+const isLoading = ref(false);
 const props = defineProps({
   examId: String
 })

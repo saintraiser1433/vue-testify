@@ -1,32 +1,30 @@
 <template>
   <form @submit.prevent="submitDeans">
     <div class="mb-3">
-      <label for="firstname">First Name</label>
+      <label class="text-sm" for="firstname">First Name</label>
       <base-input type="text" id="firstname" v-model="formDeans.first_name" required />
     </div>
     <div class="mb-3">
-      <label for="middlename">Middle Name</label>
+      <label class="text-sm" for="middlename">Middle Name</label>
       <base-input type="text" id="middlename" v-model="formDeans.middle_name" required />
     </div>
     <div class="mb-3">
-      <label for="lastname">Last Name</label>
+      <label class="text-sm" for="lastname">Last Name</label>
       <base-input type="text" id="lastname" v-model="formDeans.last_name" required />
     </div>
     <div class="mb-3">
-      <label for="lastname">Department</label>
-      <base-selector :data="departmentList" v-model.number="formDeans.department_id" />
+      <label class="text-sm" for="department">Department</label>
+      <base-selector id="department" :data="departmentList" v-model.number="formDeans.department_id" />
     </div>
     <div class="mb-3 flex gap-2 items-center">
-      <label for="status">Status:</label>
-      <base-switch v-model="formDeans.status"></base-switch>
+      <label class="text-sm" for="status">Status:</label>
+      <base-switch id="status" v-model="formDeans.status"></base-switch>
     </div>
     <div class="border-t border-colorBorder pt-2">
       <base-button type="submit" class="bg-primary">{{
         isUpdate ? 'Update' : 'Submit'
       }}</base-button>
-      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-        >Reset</base-button
-      >
+      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset">Reset</base-button>
     </div>
   </form>
 </template>

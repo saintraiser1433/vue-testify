@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="submitCourse">
     <div class="py-5">
-      <label for="course">Course:</label>
-      <base-selector class="text-base" v-model.number="courseId" :data="courseList"></base-selector>
+      <label class="text-sm" for="course">Course:</label>
+      <base-selector id="course" class="text-base" v-model.number="courseId" :data="courseList"></base-selector>
     </div>
     <div class="border-t border-colorBorder pt-2">
       <base-button type="submit" variant="primary" size="sm">Submit</base-button>

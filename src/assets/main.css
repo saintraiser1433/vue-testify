@@ -22,7 +22,7 @@
   /* LIST & Colla */
 
   .list__item-child {
-    @apply flex justify-between items-center cursor-pointer text-base-sm font-medium  py-2 px-4 rounded-md mt-2 lg:m-0 xl:m-0  hover:bg-secondaryHover gap-2;
+    @apply flex justify-between items-center cursor-pointer text-base-sm font-normal  py-2 px-4 rounded-md mt-2 m-0  hover:bg-secondaryHover gap-2;
   }
 
   .collapsible--extend .collapsible__content {
@@ -34,15 +34,15 @@
   }
 
   .collapsible__content {
-    @apply hidden bg-darken rounded-md font-thin lg:p-2 lg:shadow-md xl:p-2 z-50 xl:shadow-md;
+    @apply hidden bg-darken rounded-md font-thin lg:p-2 lg:shadow-md z-50;
   }
 
   /* TABLE & PAGINATION */
   .table__block {
-    @apply py-2 px-5 lg:px-2 lg:text-sm xl:text-sm xl:px-2 capitalize;
+    @apply py-2 px-5 lg:px-2 text-sm lg:text-xs capitalize;
   }
   .table__block--with-border {
-    @apply py-2 px-5 lg:px-2 lg:text-sm xl:text-sm xl:px-2  border border-colorBorder;
+    @apply py-2 px-5 lg:px-2 text-sm lg:text-xs  border border-colorBorder;
   }
 
   .pagination {
@@ -140,17 +140,20 @@
   @apply bg-primary;
 }
 
-.sidebar-enter-active,
-.sidebar-leave-active {
-  transition: transform 0.1s ease-in-out;
+.sprite {
+  background-image: url(../assets/logo/spritesheet.png);
+  background-repeat: no-repeat;
+  display: block;
 }
 
-.sidebar-enter-from,
-.sidebar-leave-to {
-  transform: translateX(-500px);
+.sprite-logo-lg {
+  width: 120px;
+  height: 117px;
+  background-position: -5px -5px;
 }
 
-.sidebar-leave-from,
-.sidebar-enter-to {
-  transform: translateX(0);
+.sprite-small-lg {
+  width: 36px;
+  height: 35px;
+  background-position: -135px -5px;
 }

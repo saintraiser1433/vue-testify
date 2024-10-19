@@ -1,21 +1,21 @@
 <template>
-  <BaseLoader :isLoading="isLoading"></BaseLoader>
+  <!-- <BaseLoader :isLoading="isLoading"></BaseLoader> -->
   <BaseModal :open="isOpen" size="large" title="Add Assignee" @close="closeModal">
     <template #default>
-      <div class="grid grid-cols-12 gap-5">
-        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+      <div class="grid grid-cols-5 gap-5">
+        <div class="col-span-12 lg:col-span-2">
           <AssignForm :courseList="coursesList" :deansId="deansId" :formData="data" @dataAssign="submitAssignCourse"
             @reset="resetInstance"></AssignForm>
         </div>
-        <div class="col-span-12 lg:col-span-8 xl:col-span-8">
+        <div class="col-span-12 lg:col-span-3 ">
           <AssignList :assignData="assignDeanCourses" @delete="removeDeansCourse"></AssignList>
         </div>
       </div>
     </template>
   </BaseModal>
 
-  <div class="grid grid-cols-5 gap-2">
-    <div class="col-span-5 lg:col-span-2 xl:col-span-2">
+  <div class="grid grid-cols-5 gap-5">
+    <div class="col-span-5 lg:col-span-1">
       <BaseCard title="Deans Information">
         <template #default>
           <DeansForm :isUpdate="isUpdate" :formData="data" :departmentData="departmentData" @dataDeans="submitDeans"
@@ -23,7 +23,7 @@
         </template>
       </BaseCard>
     </div>
-    <div class="col-span-5 lg:col-span-3 xl:col-span-3">
+    <div class="col-span-5 lg:col-span-4">
       <BaseCard title="List of Dean's">
         <template #default>
           <DeansList :deansData="deansData" :departmentData="departmentData" @assign="assignDeans" @update="editDeans">
@@ -43,10 +43,11 @@ import { DepartmentApi } from '@/services/department-services'
 import { CourseApi } from '@/services/course-services'
 import { useModal } from '@/composables/useModal'
 import BaseLoader from '@/components/UI/BaseLoader.vue'
-const DeansForm = defineAsyncComponent(() => import('../components/deans/DeansForm.vue'))
-const DeansList = defineAsyncComponent(() => import('../components/deans/DeansList.vue'))
-const AssignForm = defineAsyncComponent(() => import('../components/deans/DeansAssignForm.vue'))
-const AssignList = defineAsyncComponent(() => import('../components/deans/DeansAssignList.vue'))
+import DeansForm from '@/components/deans/DeansForm.vue'
+import DeansList from '@/components/deans/DeansList.vue'
+import AssignForm from '@/components/deans/DeansAssignForm.vue'
+import AssignList from '@/components/deans/DeansAssignList.vue'
+
 const { setToast } = useToast()
 const { setAlert } = useAlert()
 const { isOpen, openModal, closeModal } = useModal()

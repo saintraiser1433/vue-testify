@@ -1,15 +1,15 @@
 <template>
   <form @submit.prevent="submitExaminee">
     <div class="mb-2">
-      <label for="firstname">First Name</label>
+      <label class="text-sm" for="firstname">First Name</label>
       <base-input type="text" id="firstname" v-model="formExaminee.first_name" required />
     </div>
     <div class="mb-2">
-      <label for="middlename">Middle Name</label>
+      <label class="text-sm" for="middlename">Middle Name</label>
       <base-input type="text" id="middlename" v-model="formExaminee.middle_name" required />
     </div>
     <div class="mb-2">
-      <label for="lastname">Last Name</label>
+      <label class="text-sm" for="lastname">Last Name</label>
       <base-input type="text" id="lastname" v-model="formExaminee.last_name" required />
     </div>
     <div class="border-t border-colorBorder pt-2">

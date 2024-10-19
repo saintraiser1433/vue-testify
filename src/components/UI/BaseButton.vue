@@ -1,15 +1,10 @@
 <template>
-  <button
-    :type="type"
-    class="btn rounded"
-    :disabled="disabled"
-    :class="[
-      variant ? `bg-${variant}` : '',
-      size === 'small' ? 'btn--small' : '',
-      size === 'block' ? 'btn--block' : '',
-      isRounded ? 'rounded-full ' : ''
-    ]"
-  >
+  <button :type="type" class="btn rounded text-sm" :disabled="disabled" :class="[
+    variant ? `bg-${variant}` : '',
+    size === 'small' ? 'btn--small' : '',
+    size === 'block' ? 'btn--block' : '',
+    isRounded ? 'rounded-full ' : ''
+  ]">
     <slot></slot>
   </button>
 </template>

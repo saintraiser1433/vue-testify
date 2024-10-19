@@ -1,26 +1,18 @@
 <template>
   <form @submit.prevent="submitDepartment">
     <div class="mb-3">
-      <label for="department">Department:</label>
-      <base-input
-        type="text"
-        class="mt-2"
-        id="department"
-        v-model="formDepartment.department_name"
-        required
-      />
+      <label class="text-sm" for="department">Department:</label>
+      <base-input type="text" class="mt-2" id="department" v-model="formDepartment.department_name" required />
     </div>
     <div class="mb-3 flex gap-2 items-center">
-      <label for="status">Status:</label>
-      <base-switch v-model="formDepartment.status"></base-switch>
+      <label class="text-sm" for="status">Status:</label>
+      <base-switch id="status" v-model="formDepartment.status"></base-switch>
     </div>
     <div class="border-t border-colorBorder pt-2">
       <base-button type="submit" class="bg-primary">{{
         isUpdate ? 'Update' : 'Submit'
       }}</base-button>
-      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset"
-        >Reset</base-button
-      >
+      <base-button type="button" v-if="isUpdate" class="bg-danger ml-2" @click="reset">Reset</base-button>
     </div>
   </form>
 </template>

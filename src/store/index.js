@@ -6,9 +6,6 @@ export default createStore({
   getters: {
     getToggleState(state) {
       return state.isToggle
-    },
-    getToastState(state) {
-      return state.showToast
     }
   },
   actions: {

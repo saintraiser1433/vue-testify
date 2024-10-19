@@ -1,6 +1,6 @@
 <template>
-  <BaseLoader :isLoading="isLoading"></BaseLoader>
-  <div class="grid grid-cols-12 gap-2">
+  <!-- <BaseLoader :isLoading="isLoading"></BaseLoader> -->
+  <div v-if="!isQuestionRoute" class="grid grid-cols-12 gap-5">
     <div class="col-span-12 lg:col-span-4 xl:col-span-3">
       <BaseCard title="Exam Information">
         <template #default>
@@ -16,6 +16,7 @@
       </BaseCard>
     </div>
   </div>
+  <router-view></router-view>
 </template>
 
 <script setup>
@@ -23,10 +24,11 @@ import { useAlert } from '@/composables/useAlert'
 import { useToast } from '@/composables/useToast'
 import { ExamApi } from '@/services/exam-services'
 
-import { defineAsyncComponent, ref, onMounted } from 'vue'
-
-const ExamForm = defineAsyncComponent(() => import('../components/exam/ExamForm.vue'))
-const ExamList = defineAsyncComponent(() => import('../components/exam/ExamList.vue'))
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import ExamForm from '@/components/exam/ExamForm.vue'
+import ExamList from '@/components/exam/ExamList.vue'
+const route = useRoute()
 const { setToast } = useToast()
 const { setAlert } = useAlert()
 const { getExam, insertExam, updateExam, deleteExam } = ExamApi()
@@ -35,6 +37,11 @@ const isUpdate = ref(false)
 const examData = ref([])
 const isLoading = ref(false)
 /* Exam */
+
+const isQuestionRoute = computed(() => {
+  return route.matched.some(record => record.name === 'Question')
+})
+
 const submitExam = async (response) => {
   try {
     isLoading.value = true

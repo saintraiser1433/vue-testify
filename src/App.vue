@@ -1,59 +1,24 @@
 <template>
-
-  <AppNavBar />
-  <AppMenu>
-    <BaseList link="Home" title="Dashboard">
-      <template #icon>
-        <i-lucide-home class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Examinee" title="Examinee">
-      <template #icon>
-        <i-fluent-hat-graduation-12-regular class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Deans" title="Deans">
-      <template #icon>
-        <i-eos-icons-master-outlined class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Department" title="Department">
-      <template #icon>
-        <i-gala-book class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Course" title="Course">
-      <template #icon>
-        <i-gala-book class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Exam" title="Exam">
-      <template #icon>
-        <i-gala-book class="text-center" />
-      </template>
-    </BaseList>
-    <BaseList link="Rankings" title="Ranking">
-      <template #icon>
-        <i-ph-ranking class="text-center" />
-      </template>
-    </BaseList>
-    <BaseCollapsible title="Settings" :children="settingsData">
-      <template #icon>
-        <i-ant-design-setting-outlined class="text-center" />
-      </template>
-    </BaseCollapsible>
-
-  </AppMenu>
-  <div class="p-5 mt-12 lg:mt-2 xl:mt-2">
-    <div class="container mx-auto">
+  <div class="grid grid-cols-[260px,1fr,1fr] grid-rows-[auto,1fr] h-screen">
+    <!-- sidebar -->
+    <AppMenu />
+    <!-- header -->
+    <AppNavBar />
+    <!-- main -->
+    <main :class="isOpen ? 'lg:ml-60' : 'lg:ml-20'" class="col-span-3 px-5 py-2 mt-16 transition-all ease-in-out">
+      <div class="flex items-center flex-wrap justify-end pb-4">
+        <BaseBreadCrumbs></BaseBreadCrumbs>
+      </div>
       <router-view></router-view>
-    </div>
+    </main>
+    <!-- footer -->
+    <AppFooter />
+
   </div>
 
-
-
   <teleport to="body">
-    <div v-show="isToggle" class="block lg:hidden xl:hidden h-screen w-screen bg-[#171925] opacity-50 z-40 fixed top-0">
+    <div @click="toggle" :class="isOpen ? 'lg:hidden' : 'hidden lg:hidden'"
+      class="block h-screen w-screen bg-[#171925] opacity-50 z-20 fixed top-0">
     </div>
   </teleport>
 
@@ -64,31 +29,14 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, onBeforeUnmount, computed } from 'vue'
+import { computed } from 'vue'
 import { RouterView } from 'vue-router';
-import { debounce } from 'lodash';
-import { useCollapsiblesData } from './composables/useCollapsiblesData.js';
+import AppFooter from '@/components/layouts/AppFooter.vue';
+import AppNavBar from '@/components/layouts/AppNavBar.vue';
 
-const store = useStore()
-const { settingsData } = useCollapsiblesData();
-
-
-
-
-/* toggle size  */
-const handleResize = debounce(() => {
-  const screenWidth = window.innerWidth;
-  store.dispatch('setToggle', screenWidth >= 976);
-}, 300);
-
-const isToggle = computed(() => store.getters.getToggleState)
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-  handleResize()
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
+const store = useStore();
+const isOpen = computed(() => store.getters.getToggleState);
+const toggle = () => {
+  store.dispatch('setToggle', !isOpen.value)
+}
 </script>

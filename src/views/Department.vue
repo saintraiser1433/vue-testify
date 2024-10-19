@@ -1,7 +1,7 @@
 <template>
-  <BaseLoader :isLoading="isLoading"></BaseLoader>
-  <div class="grid grid-cols-5 gap-2">
-    <div class="col-span-5 lg:col-span-2 xl:col-span-2">
+  <!-- <BaseLoader :isLoading="isLoading"></BaseLoader> -->
+  <div class="grid grid-cols-5 gap-5">
+    <div class="col-span-5 lg:col-span-1">
       <BaseCard title="Department Information">
         <template #default>
           <DepartmentForm :isUpdate="isUpdate" :formData="data" @dataDepartment="submitDepartment"
@@ -9,7 +9,7 @@
         </template>
       </BaseCard>
     </div>
-    <div class="col-span-5 lg:col-span-3 xl:col-span-3">
+    <div class="col-span-5 lg:col-span-4">
       <BaseCard title="List of Department's">
         <template #default>
           <DepartmentList :departmentData="departmentData" @update="editDepartment" @delete="removeDepartment">
@@ -25,12 +25,15 @@ import { useToast } from '@/composables/useToast'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
 import { useAlert } from '@/composables/useAlert'
 import { DepartmentApi } from '@/services/department-services'
-const DepartmentForm = defineAsyncComponent(() =>
-  import('../components/department/DepartmentForm.vue')
-)
-const DepartmentList = defineAsyncComponent(() =>
-  import('../components/department/DepartmentList.vue')
-)
+
+import DepartmentForm from '@/components/department/DepartmentForm.vue';
+import DepartmentList from '@/components/department/DepartmentList.vue'
+// const DepartmentForm = defineAsyncComponent(() =>
+//   import('@/components/department/DepartmentForm.vue')
+// )
+// const DepartmentList = defineAsyncComponent(() =>
+//   import('@/components/department/DepartmentList.vue')
+// )
 const { getDepartment, insertDepartment, updateDepartment, deleteDepartment } = DepartmentApi()
 const { setToast } = useToast()
 const { setAlert } = useAlert()

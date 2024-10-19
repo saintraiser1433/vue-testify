@@ -2,11 +2,11 @@
   <teleport to="body">
     <div v-show="open" class="h-screen w-screen backdrop-blur-sm bg-black/50 z-50 fixed top-0 left-0"></div>
     <div v-show="open"
-      class="fixed sm:top-1/2 md:top-1/2 lg:top-1/4 left-1/2 min-h-lg w-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg z-50 bg-cardColor border border-cardColor rounded-lg"
+      class="fixed top-1/2 left-1/2 min-h-lg lg:top-1/4 w-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg z-50 bg-cardColor border border-cardColor rounded-lg"
       :class="{
-        'xl:max-w-6xl lg:max-w-4xl md:max-w-lg sm:max-w-sm': size === 'large',
-        'xl:max-w-5xl lg:max-w-4xl md:max-w-lg ': size === 'medium',
-        'xl:max-w-lg lg:max-w-md md:max-w-sm': size === 'small',
+        'lg:max-w-5xl md:max-w-lg max-w-sm ': size === 'large',
+        'lg:max-w-5xl md:max-w-lg ': size === 'medium',
+        'lg:max-w-md md:max-w-sm': size === 'small',
         'max-w-md': size === null
       }">
       <div class="flex border-b-2 border-gray-600 justify-between items-center p-3">
